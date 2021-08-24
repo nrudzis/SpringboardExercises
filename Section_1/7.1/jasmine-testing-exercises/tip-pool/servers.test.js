@@ -16,7 +16,7 @@ describe("Servers test (with setup and tear-down)", function() {
     updateServerTable();
 
     expect(serverTbody.firstElementChild.nodeName).toBe('TR');
-  })
+  });
 
   afterEach(function() {
     // teardown logic
