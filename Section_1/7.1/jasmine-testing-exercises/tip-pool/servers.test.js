@@ -11,6 +11,13 @@ describe("Servers test (with setup and tear-down)", function() {
     expect(allServers['server' + serverId].serverName).toEqual('Alice');
   });
 
+  it('should append new tr to serverTbody on updateServerTable()', function () {
+    submitServerInfo();
+    updateServerTable();
+
+    expect(serverTbody.firstElementChild.nodeName).toBe('TR');
+  })
+
   afterEach(function() {
     // teardown logic
     allServers = {};
