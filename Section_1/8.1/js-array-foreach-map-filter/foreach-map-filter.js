@@ -8,7 +8,7 @@ Examples:
 
 */
 function doubleValues(arr) {
-  newArr = []
+  newArr = [];
   arr.forEach(function(val) {
     newArr.push(val*2);
   });
