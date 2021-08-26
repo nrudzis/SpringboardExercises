@@ -1,4 +1,4 @@
-//forEach()
+//forEach
 /*
 Write a function called doubleValues which accepts an array and returns a new array with all the values in the array passed to the function doubled
 
@@ -90,7 +90,7 @@ function vowelCount(str) {
 }
 
 
-//map()
+//map
 /*
 Write a function called doubleValuesWithMap which accepts an array and returns a new array with all the values in the array passed to the function doubled
 
@@ -146,7 +146,7 @@ function extractFullName(arr) {
 }
 
 
-//filter()
+//filter
 /*
 Write a function called filterByValue which accepts an array of objects and a key and returns a new array with all the objects that contain that key.
 
