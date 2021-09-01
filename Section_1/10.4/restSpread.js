@@ -9,7 +9,7 @@ function filterOutOdds() {
 //  # Refactor it to use the rest operator & an arrow function:
 const filterOutOdds = (...nums) => nums.filter(num => num % 2 === 0);
 
-//  # finMin
+//  # findMin
 const findMin = (...nums) => nums.reduce((min, num) => min < num ? min : num);
 
 //  # mergeObjects
@@ -28,7 +28,7 @@ const removeItem = (items) => {
 //  * Return a new array with every item in array1 and array2.
 const extend = (array1, array2) => [...array1, ...array2];
 
-//   * Return a new object with all the keys and values from obj and a new key/value pair.
+//  * Return a new object with all the keys and values from obj and a new key/value pair.
 const addKeyVal = (obj, key, val) => {
   let newObj = {...obj};
   newObj[key] = val;
