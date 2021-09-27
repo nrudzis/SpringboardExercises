@@ -42,14 +42,13 @@ function makeHtmlBoard() {
   }
   htmlBoard.append(top);                            // make top a child element of htmlBoard
 
-    const row = document.createElement("tr");       // create table row element called row
-    for (let x = 0; x < WIDTH; x++) {               // do the contained WIDTH times
-      const cell = document.createElement("td");    // create table data cell element called cell
-      cell.setAttribute("id", `${y}-${x}`);         // give cell an id that is unique y-x combination
-      row.append(cell);                             // make cell a child element of row
-    }
-    htmlBoard.append(row);                          // make row a child element of htmlBoard
+  const row = document.createElement("tr");         // create table row element called row
+  for (let x = 0; x < WIDTH; x++) {                 // do the contained WIDTH times
+    const cell = document.createElement("td");      // create table data cell element called cell
+    cell.setAttribute("id", `${y}-${x}`);           // give cell an id that is unique y-x combination
+    row.append(cell);                               // make cell a child element of row
   }
+  htmlBoard.append(row);                            // make row a child element of htmlBoard
 }
 
 /** findSpotForCol: given column x, return top empty y (null if filled) */
