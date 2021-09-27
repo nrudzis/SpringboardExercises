@@ -62,7 +62,7 @@ function findSpotForCol(x) {
       return y;
     }
   }
-  return 0;
+  return null;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
