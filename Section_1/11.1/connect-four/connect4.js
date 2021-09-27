@@ -29,28 +29,26 @@ function makeBoard() {
 
 function makeHtmlBoard() {
   // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
-
+  const htmlBoard = document.getElementById("board");
   // TODO: add comment for this code
-  var top = document.createElement("tr");
-  top.setAttribute("id", "column-top");
-  top.addEventListener("click", handleClick);
+  const top = document.createElement("tr");         // create table row element called top
+  top.setAttribute("id", "column-top");             // give top an id
+  top.addEventListener("click", handleClick);       // run handleClick when top is clicked
 
-  for (var x = 0; x < WIDTH; x++) {
-    var headCell = document.createElement("td");
-    headCell.setAttribute("id", x);
-    top.append(headCell);
+  for (let x = 0; x < WIDTH; x++) {                 // do the contained WIDTH times
+    const headCell = document.createElement("td");  // create table data cell element called headCell
+    headCell.setAttribute("id", x);                 // give headCell an id
+    top.append(headCell);                           // make headCell a child element of top
   }
-  htmlBoard.append(top);
+  htmlBoard.append(top);                            // make top a child element of htmlBoard
 
-  // TODO: add comment for this code
-  for (var y = 0; y < HEIGHT; y++) {
-    const row = document.createElement("tr");
-    for (var x = 0; x < WIDTH; x++) {
-      const cell = document.createElement("td");
-      cell.setAttribute("id", `${y}-${x}`);
-      row.append(cell);
+    const row = document.createElement("tr");       // create table row element called row
+    for (let x = 0; x < WIDTH; x++) {               // do the contained WIDTH times
+      const cell = document.createElement("td");    // create table data cell element called cell
+      cell.setAttribute("id", `${y}-${x}`);         // give cell an id that is unique y-x combination
+      row.append(cell);                             // make cell a child element of row
     }
-    htmlBoard.append(row);
+    htmlBoard.append(row);                          // make row a child element of htmlBoard
   }
 }
 
