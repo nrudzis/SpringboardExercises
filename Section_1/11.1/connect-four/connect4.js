@@ -56,14 +56,19 @@ function makeHtmlBoard() {
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
 function findSpotForCol(x) {
-  // TODO: write the real version of this, rather than always returning 0
+  // TODO: write the real version of this, rather than always returning 0 - DONE
+  for(let y = board.length - 1; y >= 0; y--) {
+    if(!board[y][x]) {
+      return y;
+    }
+  }
   return 0;
 }
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
 function placeInTable(y, x) {
-  // TODO: make a div and insert into correct table cell
+  // TODO: make a div and insert into correct table cell - DONE
   const piece = document.createElement("div");
   currPlayer === 1 ? piece.setAttribute("class", "piece player1") : piece.setAttribute("class", "piece player2");
   const cell = document.getElementById(`${y}-${x}`);
@@ -73,7 +78,10 @@ function placeInTable(y, x) {
 /** endGame: announce game end */
 
 function endGame(msg) {
-  // TODO: pop up alert message
+  // TODO: pop up alert message - DONE
+  const top = document.getElementById("column-top");
+  top.removeEventListener("click", handleClick);
+  setTimeout(() => alert(msg), 0);
 }
 
 /** handleClick: handle click of column top to play piece */
