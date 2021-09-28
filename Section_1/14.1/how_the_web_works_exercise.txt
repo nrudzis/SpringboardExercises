@@ -1,0 +1,12 @@
+1. HTTP stands for Hyper Text Transfer Protocol. It provides rules of communication between the browser and web server.
+2. URL stands for Universal Resource Locator. It includes the protocol (http, https, ftp, etc.), hostname (eg. google.com), port, resource (eg. web page), and query.
+3. DNS stands for Domain Name System. It is like the phonebook for the internet. It translates the hostname into an IP address.
+4. A query string is a part of the DNS that provides additional information for the resource, such as search terms, or information from a form.
+5. Two HTTP verbs are GET and POST. A GET request doesn't have side-effects (doesn't change data on the server); a POST request has side-effects (changes data on server).
+6. An HTTP request is a request-response protocol between a client and a server. It contains a method (GET, POST, etc.), http protocol version, resource URL, and headers.
+7. HTTP headers enable the client and server to pass additional information in the HTTP request-response. For example, an Accept header is a request header indicating what kind of response is permitted. The Age header is a response header containing the time in seconds that the entry has been in the cache.
+8. When a URL is entered into the browser:
+  - the hostname is resolved into an IP address using DNS
+  - the client browser makes a request to that IP, consisting of the request method, http protocol version, resource URL, and any headers
+  - the server sends a response, consisting of the http protocol version, response status code (200, 404, etc.), response headers, and the response body
+  - the client browser assembles the response body HTML into a DOM, and sends new requests for any additional resources such as CSS, Javascript, and images, and receives responses for each
