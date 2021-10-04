@@ -1,6 +1,6 @@
 const $gifSearch = $('#gifSearch');
 
-$('<ul>').attr('id', 'gifList').insertAfter('#gifSearchForm');
+$('<ul>').attr('id', 'gifList').insertAfter('#gifRemoveButton');
 
 $('#gifSearchForm').on('submit', async function getGif(e) {
   e.preventDefault();
@@ -14,6 +14,11 @@ $('#gifSearchForm').on('submit', async function getGif(e) {
   imgSrc = res.data.data[randIndex].images.original.url;
   $('#gifList').append('<li>').append(`<img src=${imgSrc}>`);
   $gifSearch.val('');
+});
+
+$('#gifRemoveButton').on('click', function(e) {
+  e.preventDefault();
+  $('#gifList').remove();
 });
 
 console.log("Let's get this party started!");
