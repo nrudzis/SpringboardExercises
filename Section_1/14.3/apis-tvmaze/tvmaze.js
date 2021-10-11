@@ -49,9 +49,10 @@ function populateShows(shows) {
             <h5 class="card-title">${show.name}</h5>
             <p class="card-text">${show.summary}</p>
           </div>
+          <button class="btn btn-info show-episodes">Episodes</button>
         </div>
-      </div>
-      `);
+      </div>`
+      );
 
     $showsList.append($item);
   }
@@ -86,7 +87,7 @@ async function getEpisodes(id) {
   //       you can get this by making GET request to
   //       http://api.tvmaze.com/shows/SHOW-ID-HERE/episodes - DONE
   let res = await axios.get(`https://api.tvmaze.com/shows/${id}/episodes`);
-  console.log(res);
+  //console.log(res);
   return res.data.reduce((episodes, nextEpisode) => {
     episodes.push({
       id: nextEpisode.id,
@@ -95,7 +96,31 @@ async function getEpisodes(id) {
       number: nextEpisode.number
     });
     // TODO: return array-of-episode-info, as described in docstring above - DONE
-    console.log(episodes);
     return episodes;
   }, []);
 }
+
+function populateEpisodes(episodes) {
+  const $episodesList = $("#episodes-list");
+  $episodesList.empty();
+  if(!episodes.length) {
+    $episodesList.append("<li>No episodes to show!</li>");
+  } else {
+    for(let episode of episodes) {
+      $li = $(
+        `<li data-episode-id="${episode.id}">
+          ${episode.name} (season ${episode.season}, number ${episode.number})
+        </li>`
+      );
+    $episodesList.append($li);
+    }
+  }
+}
+
+$("#shows-list").on("click", ".show-episodes", async function handleClick(evt) {
+  evt.preventDefault();
+  $("#episodes-area").show();
+  let id = $(evt.target).parent().data("showId");
+  let episodes = await getEpisodes(id);
+  populateEpisodes(episodes);
+});
