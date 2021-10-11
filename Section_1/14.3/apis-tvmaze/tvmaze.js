@@ -81,10 +81,21 @@ $("#search-form").on("submit", async function handleSearch (evt) {
  *      { id, name, season, number }
  */
 
-//async function getEpisodes(id) {
+async function getEpisodes(id) {
   // TODO: get episodes from tvmaze
   //       you can get this by making GET request to
-  //       http://api.tvmaze.com/shows/SHOW-ID-HERE/episodes
-
-  // TODO: return array-of-episode-info, as described in docstring above
-//}
+  //       http://api.tvmaze.com/shows/SHOW-ID-HERE/episodes - DONE
+  let res = await axios.get(`https://api.tvmaze.com/shows/${id}/episodes`);
+  console.log(res);
+  return res.data.reduce((episodes, nextEpisode) => {
+    episodes.push({
+      id: nextEpisode.id,
+      name: nextEpisode.name,
+      season: nextEpisode.season,
+      number: nextEpisode.number
+    });
+    // TODO: return array-of-episode-info, as described in docstring above - DONE
+    console.log(episodes);
+    return episodes;
+  }, []);
+}
