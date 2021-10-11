@@ -26,7 +26,7 @@ async function searchShows(query) {
       id: nextShow.show.id,
       name: nextShow.show.name,
       summary: nextShow.show.summary,
-      image: nextShow.show.image ? nextShow.show.image.original : 'https://tinyurl.com/tv-missing'
+      image: nextShow.show.image ? nextShow.show.image.original : "https://tinyurl.com/tv-missing"
     });
     return shows;
   }, []);
@@ -87,7 +87,6 @@ async function getEpisodes(id) {
   //       you can get this by making GET request to
   //       http://api.tvmaze.com/shows/SHOW-ID-HERE/episodes - DONE
   let res = await axios.get(`https://api.tvmaze.com/shows/${id}/episodes`);
-  //console.log(res);
   return res.data.reduce((episodes, nextEpisode) => {
     episodes.push({
       id: nextEpisode.id,
