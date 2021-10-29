@@ -1,0 +1,18 @@
+1.
+git init
+touch testfile.txt
+git add testfile.txt
+git commit -m "created new test file"
+
+2.
+git remote add origin URL_TO_GITHUB_REPOSITORY
+git push -u origin master
+
+3.
+git checkout -b NAME_OF_BRANCH
+touch testfile2.txt
+git add testfile2.txt
+git commit -m "created another test file"
+
+4.
+git push -u origin NAME_OF_BRANCH
