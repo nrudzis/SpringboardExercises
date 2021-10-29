@@ -16,13 +16,15 @@ $('form').on('submit', (e) => {
   }
   movies[title] = rating;
   console.log(movies);
-  $('#movie-area').append(
-    `<div data-title="${title}">
-      <p>${title} - ${movies[title]}</p>
-      <button>Remove</button>
-    </div>`
-  );
+  generateMovie(title);
   resetForm();
+});
+
+$('#title-sort').on('click', () => {
+  $('#movie-area').empty();
+  Object.keys(movies)
+    .sort()
+    .forEach(title => generateMovie(title));
 });
 
 $('#movie-area').on('click', 'button', (e) => {
@@ -30,6 +32,15 @@ $('#movie-area').on('click', 'button', (e) => {
   console.log(movies);
   $(e.currentTarget).parent().remove();
 });
+
+const generateMovie = (title) => {
+  $('#movie-area').append(
+    `<div data-title="${title}">
+      <p>${title} - ${movies[title]}</p>
+      <button>Remove</button>
+    </div>`
+  );
+}
 
 const resetForm = () => {
   $('#title').val('');
