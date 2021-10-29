@@ -74,7 +74,21 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script>
-  // Add your code here!
+  $(document).ready(() => console.log("Let's get ready to party with jQuery!"));
+  $('article img').addClass('image-center');
+  $('article').children().last().remove();
+  let titleSize = Math.floor(Math.random() * 100);
+  $('#title').css('font-size', `${titleSize}px`);
+  $('ol').append('<li>APPENDED</li>');
+  $('aside').empty();
+  $('aside').append('<p>NEVERMIND. I AM SORRY THAT LIST EVER CAME TO BE.');
+  $('input').on('change', () => {
+    let r = $('div').children('input:eq(0)').val();
+    let g = $('div').children('input:eq(1)').val();
+    let b = $('div').children('input:eq(2)').val();
+    $('body').css('background-color', `rgb(${r}, ${g}, ${b})`);
+  });
+  $('body').on('click', 'img', (e) => $(e.currentTarget).remove());
 </script>
 </body>
 
