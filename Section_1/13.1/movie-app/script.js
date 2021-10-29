@@ -15,7 +15,6 @@ $('form').on('submit', (e) => {
     return;
   }
   movies[title] = rating;
-  console.log(movies);
   generateMovie(title);
   resetForm();
 });
@@ -36,7 +35,6 @@ $('#rating-sort').on('click', () => {
 
 $('#movie-area').on('click', 'button', (e) => {
   delete movies[$(e.currentTarget).parent().data('title')]
-  console.log(movies);
   $(e.currentTarget).parent().remove();
 });
 
