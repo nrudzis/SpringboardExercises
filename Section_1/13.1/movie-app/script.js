@@ -5,6 +5,7 @@ $('form').on('submit', (e) => {
   let title = $('#title').val();
   let rating = $('#rating').val();
   movies[title] = rating;
+  console.log(movies);
   $('#movie-area').append(
     `<div data-title="${title}">
       <p>${title} - ${movies[title]}</p>
@@ -13,4 +14,10 @@ $('form').on('submit', (e) => {
   );
   $('#title').val('');
   $('#rating').val('');
+});
+
+$('#movie-area').on('click', 'button', (e) => {
+  delete movies[$(e.currentTarget).parent().data('title')]
+  console.log(movies);
+  $(e.currentTarget).parent().remove();
 });
