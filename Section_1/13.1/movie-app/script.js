@@ -27,6 +27,13 @@ $('#title-sort').on('click', () => {
     .forEach(title => generateMovie(title));
 });
 
+$('#rating-sort').on('click', () => {
+  $('#movie-area').empty();
+  Object.keys(movies)
+    .sort((firstTitle, nextTitle) => movies[nextTitle] - movies[firstTitle])
+    .forEach(title => generateMovie(title));
+});
+
 $('#movie-area').on('click', 'button', (e) => {
   delete movies[$(e.currentTarget).parent().data('title')]
   console.log(movies);
