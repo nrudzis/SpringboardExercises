@@ -11,4 +11,6 @@ $('form').on('submit', (e) => {
       <button>Remove</button>
     </div>`
   );
+  $('#title').val('');
+  $('#rating').val('');
 });
