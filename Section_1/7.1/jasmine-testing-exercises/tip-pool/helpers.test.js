@@ -28,12 +28,21 @@ describe("Helpers test", function() {
   });
 
   //appendTd test
-  it("should create new td with innerText and append to tr", function() {
+  it("should create new td with innerText and append to tr on appendTd", function() {
     let newTr = document.createElement('tr');
     appendTd(newTr, 'test text');
     paymentTbody.appendChild(newTr);
     expect(document.querySelector('#paymentTable tbody tr').firstElementChild.nodeName).toEqual('TD');
     expect(document.querySelector('#paymentTable tbody tr').firstElementChild.innerText).toEqual('test text');
+  });
+
+  //appendDeleteBtn test
+  it("should create new delete td with innerText 'X' and append to tr on appendDeleteBtn", function() {
+    let newTr = document.createElement('tr');
+    appendDeleteBtn(newTr);
+    paymentTbody.appendChild(newTr);
+    expect(document.querySelector('#paymentTable tbody tr').firstElementChild.nodeName).toEqual('TD');
+    expect(document.querySelector('#paymentTable tbody tr').firstElementChild.innerText).toEqual('X');
   });
 
   //tear-down
