@@ -14,7 +14,8 @@ class Game {
     const board = document.getElementById('board');
     const top = document.createElement('tr');
     top.setAttribute('id', 'column-top');
-    top.addEventListener('click', this.handleClick.bind(this));
+    this.handleClick = this.handleClick.bind(this);
+    top.addEventListener('click', this.handleClick);
     for (let x = 0; x < this.width; x++) {
       const headCell = document.createElement('td');
       headCell.setAttribute('id', x);
@@ -48,7 +49,12 @@ class Game {
     spot.append(piece);
   }
   endGame(msg) {
+    this.deactivateBoard();
     alert(msg);
+  }
+  deactivateBoard() {
+    const top = document.getElementById('column-top');
+    top.removeEventListener('click', this.handleClick);
   }
   handleClick(evt) {
     const x = +evt.target.id;
@@ -91,6 +97,14 @@ class Game {
   }
 }
 
-let connectFour = new Game(7, 6);
-connectFour.makeBoard();
-connectFour.makeHtmlBoard();
+const gameArea = document.getElementById('game');
+const gameButton = document.createElement('button');
+gameButton.innerText = 'Start Game!';
+gameButton.addEventListener('click', () => {
+  const board = document.getElementById('board');
+  board.innerHTML = '';
+  let connectFour = new Game(7, 6);
+  connectFour.makeBoard();
+  connectFour.makeHtmlBoard();
+});
+gameArea.prepend(gameButton);
