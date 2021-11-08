@@ -1,13 +1,15 @@
 class Game {
-  constructor(width, height) {
+  constructor(width, height, player1, player2) {
     this.width = width;
     this.height = height;
-    this.currPlayer = 1;
+    this.player1 = player1;
+    this.player2 = player2;
+    this.currPlayer = player1;
     this.board = [];
   }
   makeBoard() {
     for (let y = 0; y < this.height; y++) {
-      this.board.push(Array.from({ length: this.width}));
+      this.board.push(Array.from({ length: this.width }));
     }
   }
   makeHtmlBoard() {
@@ -43,14 +45,14 @@ class Game {
   placeInTable(y, x) {
     const piece = document.createElement('div');
     piece.classList.add('piece');
-    piece.classList.add(`p${this.currPlayer}`);
+    piece.style.backgroundColor = this.currPlayer.color;
     piece.style.top = -50 * (y + 2);
     const spot = document.getElementById(`${y}-${x}`);
     spot.append(piece);
   }
   endGame(msg) {
     this.deactivateBoard();
-    alert(msg);
+    setTimeout(() => alert(msg), 0);
   }
   deactivateBoard() {
     const top = document.getElementById('column-top');
@@ -62,15 +64,15 @@ class Game {
     if (y === null) {
       return;
     }
-    this.board[y][x] = this.currPlayer;
+    this.board[y][x] = this.currPlayer.color;
     this.placeInTable(y, x);
     if (this.checkForWin()) {
-      return this.endGame(`Player ${this.currPlayer} won!`);
+      return this.endGame(`${this.currPlayer.color} won!`);
     }
     if (this.board.every(row => row.every(cell => cell))) {
       return this.endGame('Tie!');
     }
-    this.currPlayer = this.currPlayer === 1 ? 2 : 1;
+    this.currPlayer = this.currPlayer === this.player1 ? this.player2 : this.player1;
   }
   checkForWin() {
     const _win = (cells) => {
@@ -80,7 +82,7 @@ class Game {
           y < this.height &&
           x >= 0 &&
           x < this.width &&
-          this.board[y][x] === this.currPlayer
+          this.board[y][x] === this.currPlayer.color
       );
     }
     for (let y = 0; y < this.height; y++) {
@@ -97,14 +99,31 @@ class Game {
   }
 }
 
+class Player {
+  constructor(color) {
+    this.color = color;
+  }
+}
+
 const gameArea = document.getElementById('game');
+const gameForm = document.createElement('form');
+const player1Input = document.createElement('input');
+const player2Input = document.createElement('input');
 const gameButton = document.createElement('button');
+player1Input.setAttribute('type', 'text');
+player2Input.setAttribute('type', 'text');
 gameButton.innerText = 'Start Game!';
-gameButton.addEventListener('click', () => {
+gameButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
   const board = document.getElementById('board');
   board.innerHTML = '';
-  let connectFour = new Game(7, 6);
+  const player1Color = player1Input.value;
+  const player2Color = player2Input.value;
+  let player1 = new Player(player1Color);
+  let player2 = new Player(player2Color);
+  let connectFour = new Game(7, 6, player1, player2);
   connectFour.makeBoard();
   connectFour.makeHtmlBoard();
 });
+gameForm.append(player1Input, player2Input, gameButton);
 gameArea.prepend(gameButton);
