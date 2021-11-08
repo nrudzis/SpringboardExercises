@@ -126,4 +126,4 @@ gameButton.addEventListener('click', (evt) => {
   connectFour.makeHtmlBoard();
 });
 gameForm.append(player1Input, player2Input, gameButton);
-gameArea.prepend(gameButton);
+gameArea.prepend(gameForm);
