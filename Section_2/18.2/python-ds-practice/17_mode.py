@@ -11,3 +11,10 @@ def mode(nums):
         >>> mode([2, 2, 3, 3, 2])
         2
     """
+    largest = 0
+    most_common = 0
+    for k, v in {num: nums.count(num) for num in nums}.items():
+        if v > largest:
+            most_common = k
+            largest = v
+    return most_common
