@@ -21,3 +21,5 @@ def is_palindrome(phrase):
         >>> is_palindrome('Noon')
         True
     """
+    letters_list = [l.lower() for l in ''.join(phrase.split())]
+    return ''.join(letters_list) == ''.join(list(reversed(letters_list)))
