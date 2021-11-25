@@ -22,3 +22,4 @@ def valid_parentheses(parens):
         >>> valid_parentheses(")()(")
         False
     """
+    return ord(parens[0]) == 40 and len(parens) % 2 == 0
