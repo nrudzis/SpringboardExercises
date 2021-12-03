@@ -20,3 +20,17 @@ class SerialGenerator:
     100
     """
 
+    def __init__(self, start):
+        "Get value of start and set counter equal to start"
+        self.start = start
+        self.counter = start
+
+    def generate(self):
+        "Return counter and increment by 1"
+        counter = self.counter
+        self.counter += 1
+        return counter
+        
+    def reset(self):
+        "Reset counter to equal start"
+        self.counter = self.start
