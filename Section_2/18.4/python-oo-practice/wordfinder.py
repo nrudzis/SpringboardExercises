@@ -18,3 +18,11 @@ class WordFinder:
     def random(self):
         """Display random word."""
         return random.choice(self.words)
+
+class SpecialWordFinder(WordFinder):
+    def __init__(self, path):
+        super().__init__(path)
+
+    def parse(self, file):
+        words = super().parse(file)
+        return [word for word in words if word != "" and "#" not in word]
