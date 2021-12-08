@@ -21,16 +21,19 @@ class SerialGenerator:
     """
 
     def __init__(self, start):
-        "Get value of start and set counter equal to start"
+        """Get value of start and set counter equal to start"""
         self.start = start
         self.counter = start
 
+    def __repr__(self):
+        return f"<SerialGenerator (start = {self.start}, counter = {self.counter})>"
+
     def generate(self):
-        "Return counter and increment by 1"
+        """Return counter and increment by 1"""
         counter = self.counter
         self.counter += 1
         return counter
         
     def reset(self):
-        "Reset counter to equal start"
+        """Reset counter to equal start"""
         self.counter = self.start
