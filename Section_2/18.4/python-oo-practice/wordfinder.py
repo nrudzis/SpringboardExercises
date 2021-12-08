@@ -16,7 +16,28 @@ class WordFinder:
         return [word.rstrip("\n") for word in file]
 
     def random(self):
-        """Display random word."""
+        """Display random word.
+
+        >>> test = open("test.txt", "x")
+        >>> test = open("test.txt", "w")
+        >>> test.write("hello\\nworld\\nI\\nam\\na\\nstring\\nok")
+        28
+        >>> test = open("test.txt", "r")
+        >>> wf = WordFinder("test.txt")
+        7 words read
+        >>> def different_words():
+        ...     first_word = wf.random()
+        ...     second_word = wf.random()
+        ...     while first_word == second_word:
+        ...         second_word = wf.random()
+        ...     return first_word != second_word
+        ...
+        >>> different_words()
+        True
+        >>> import os
+        >>> os.remove("test.txt")
+        """
+
         return random.choice(self.words)
 
 class SpecialWordFinder(WordFinder):
