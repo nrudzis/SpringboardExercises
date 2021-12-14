@@ -13,7 +13,7 @@ async function getAndShowStoriesOnStart() {
 }
 
 async function submitNewStory(evt) {
-  console.debug("stories", evt);
+  console.debug("submitNewStory", evt);
   evt.preventDefault();
 
   const author = $("#new-story-author").val();
