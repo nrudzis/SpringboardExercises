@@ -5,7 +5,8 @@
   margin-left: 80px;
 }
 
-#signup-form button {
+#signup-form button,
+#new-story-form button {
   width: 8rem;
 }
 
