@@ -30,7 +30,8 @@
   text-decoration: none;
 }
 
-.story-author {
+.story-author,
+.story-user {
   margin-left: 2em;
 }
 
