@@ -216,4 +216,24 @@ class User {
       return null;
     }
   }
+
+  async addOrRemoveFavoriteStory(storyId, method) {
+    const token = this.loginToken;
+    const response = await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
+      method: method,
+      params: { token }
+    });
+
+    currentUser = new User(
+      {
+        username: this.username,
+        name: this.name,
+        createdAt: this.createdAt,
+        favorites: response.data.user.favorites,
+        ownStories: this.stories
+      },
+      token
+    );
+  }
 }
