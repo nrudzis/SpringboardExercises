@@ -69,15 +69,3 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
-
-function handleFavoriteStoryClick(evt) {
-  const storyId = evt.target.parentNode.id;
-
-  if(!currentUser) {
-    navLoginClick();
-  }
-
-  console.log(`you clicked ${storyId}`);
-}
-
-$allStoriesList.on("click", "i.far", handleFavoriteStoryClick);
