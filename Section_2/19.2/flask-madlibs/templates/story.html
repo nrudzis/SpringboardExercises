@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Story</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Story{% endblock %}
+{% block content %}
     <h1>Your Story</h1>
     <p>{{ your_story }}</p>
-</body>
-</html>
+{% endblock %}

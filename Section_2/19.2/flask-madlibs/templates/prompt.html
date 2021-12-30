@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Madlibs</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}Madlibs{% endblock %}
+{% block content %}
     <h1>Madlibs</h1>
     <form action="/story">
         {% for prompt in prompts %}
@@ -12,5 +8,4 @@
         {% endfor %}
         <button>Submit</button>
     </form>
-</body>
-</html>
+{% endblock %}
