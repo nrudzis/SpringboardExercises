@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Madlibs</title>
+</head>
+<body>
+    <h1>Madlibs</h1>
+    <form action="/story">
+        {% for prompt in prompts %}
+            <p>{{ prompt }}: <input type="text" name="{{ prompt }}"></p>
+        {% endfor %}
+        <button>Submit</button>
+    </form>
+</body>
+</html>
