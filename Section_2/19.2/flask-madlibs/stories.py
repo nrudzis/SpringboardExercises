@@ -35,11 +35,8 @@ class Story:
         return text
 
 
-# Here's a story to get you started
-
-
-story = Story(
-    ["place", "noun", "verb", "adjective", "plural_noun"],
-    """Once upon a time in a long-ago {place}, there lived a
-       large {adjective} {noun}. It loved to {verb} {plural_noun}."""
-)
+stories = {
+    "story1": [["place", "noun", "verb", "adjective", "plural_noun"], """Once upon a time in a long-ago {place}, there lived a large {adjective} {noun}. It loved to {verb} {plural_noun}."""],
+    "story2": [["adverb", "noun", "adjective"], """It is a truth {adverb} acknowledged, that a single {noun} in possession of a {adjective} fortune, must be in want of a wife"""],
+    "story3": [["noun", "plural_noun", "adjective", "adverb"], """The story so far: In the beginning the {noun} was created. This has made a lot of {plural_noun} very {adjective} and been {adverb} regarded as a bad move."""]
+}

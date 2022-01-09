@@ -3,6 +3,7 @@
 {% block content %}
     <h1>Madlibs</h1>
     <form action="/story">
+        <input type="hidden" name="selected_story" value="{{ selected_story }}">
         {% for prompt in prompts %}
             <p>{{ prompt }}: <input type="text" name="{{ prompt }}"></p>
         {% endfor %}
