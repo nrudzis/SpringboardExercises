@@ -8,8 +8,8 @@
     <h1>Select Your Story</h1>
     <form action="/prompt">
         <select name="selected_story">
-            {% for story in stories %}
-                <option value="{{ story }}">{{ story }}</option>
+            {% for story_name in story_names %}
+                <option value="{{ story_name }}">{{ story_name }}</option>
             {% endfor %}
         </select>
         <input type="submit">
