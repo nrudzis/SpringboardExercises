@@ -2,8 +2,7 @@
 {% block title %}Madlibs{% endblock %}
 {% block content %}
     <h1>Madlibs</h1>
-    <form action="/story/{{ selected_story_name }}" method="post">
-        <input type="hidden" name="selected_story" value="{{ selected_story }}">
+    <form action="/story/{{ selected_story_name }}">
         {% for prompt in prompts %}
             <p>{{ prompt }}: <input type="text" name="{{ prompt }}"></p>
         {% endfor %}
