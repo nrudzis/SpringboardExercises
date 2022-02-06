@@ -3,5 +3,7 @@
 {% block content %}
     <h1>{{ survey_title }}</h1>
     <p>{{ survey_instructions }}</p>
-    <button>Start Survey</button>
+    <form action="/questions/0">
+        <input type="submit" value="Start Survey">
+    </form>
 {% endblock %}
