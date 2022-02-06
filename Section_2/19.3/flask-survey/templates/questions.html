@@ -2,12 +2,13 @@
 {% block title %}{{ survey_title }} - Question {{ q_number }}{% endblock %}
 {% block content %}
     <h1>Question {{ q_number }}</h1>
-    <form action="/answer" method=["POST"]>
+    <form action="/answer" method="POST">
+        <input type="hidden" name="q_number" value="{{ q_number }}">
         <p>{{ question }}</p>
         <ul>
         {% for choice in choices %}
             <li>
-                <input type="radio" id="{{ loop.index0 }}">
+                <input type="radio" id="{{ loop.index0 }}" name="answer" value="{{ choice}}">
                 <label for="{{ loop.index0 }}">{{ choice }}</label>
             </li>
         {% endfor %}
