@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_debugtoolbar import DebugToolbarExtension
 import surveys
 
@@ -24,6 +24,7 @@ def start_page():
 def question_page(q_number):
     """Display survey question."""
     if int(q_number) != len(responses):
+        flash("ERROR: Access denied. Please submit response to current question.")
         return redirect(url_for('question_page', q_number=str(len(responses))))
     else:
         survey_question = satisfaction_survey.questions[int(q_number)]
