@@ -8,7 +8,7 @@
         <ul>
         {% for choice in choices %}
             <li>
-                <input type="radio" id="{{ loop.index0 }}" name="answer" value="{{ choice}}">
+                <input type="radio" id="{{ loop.index0 }}" name="answer" value="{{ choice }}">
                 <label for="{{ loop.index0 }}">{{ choice }}</label>
             </li>
         {% endfor %}

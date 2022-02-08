@@ -23,15 +23,18 @@ def start_page():
 @app.route('/questions/<q_number>')
 def question_page(q_number):
     """Display survey question."""
-    survey_question = satisfaction_survey.questions[int(q_number)]
-    question = survey_question.question
-    choices = survey_question.choices
-    return render_template("questions.html", survey_title=satisfaction_survey_title, q_number=q_number, question=question, choices=choices)
+    if int(q_number) != len(responses):
+        return redirect(url_for('question_page', q_number=str(len(responses))))
+    else:
+        survey_question = satisfaction_survey.questions[int(q_number)]
+        question = survey_question.question
+        choices = survey_question.choices
+        return render_template("questions.html", survey_title=satisfaction_survey_title, q_number=q_number, question=question, choices=choices)
 
 
 @app.route('/answer', methods=["POST"])
 def handle_answers():
-    """Append answers to responses list and redirect to the next question"""
+    """Append answers to responses list and redirect to the next question."""
     answer = request.form["answer"]
     responses.append(answer)
     q_number = request.form["q_number"]
@@ -41,4 +44,5 @@ def handle_answers():
 
 @app.route('/thank-you')
 def say_thanks():
+    """Render thank you page."""
     return render_template("thanks.html", survey_title=satisfaction_survey_title)
