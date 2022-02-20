@@ -3,7 +3,6 @@
 {% block content %}
     <h1>Question {{ q_number }}</h1>
     <form action="/answer" method="POST">
-        <input type="hidden" name="q_number" value="{{ q_number }}">
         <p>{{ question }}</p>
         <ul>
         {% for choice in choices %}

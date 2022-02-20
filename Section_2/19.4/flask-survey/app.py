@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 import surveys
 
@@ -8,7 +8,6 @@ app.config['SECRET_KEY'] = "secret"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
-responses = []
 satisfaction_survey = surveys.surveys["satisfaction"]
 satisfaction_survey_title = satisfaction_survey.title
 
@@ -20,27 +19,39 @@ def start_page():
     return render_template("home.html", survey_title=satisfaction_survey_title, survey_instructions=survey_instructions)
 
 
-@app.route('/questions/<q_number>')
+@app.route('/session', methods=["POST"])
+def set_up_session():
+    """Create list within session to hold survey answers."""
+    session["responses"] = []
+    responses_length = len(session["responses"])
+    return redirect(url_for('question_page', q_number=str(responses_length)))
+
+
+@app.route('/questions/<int:q_number>')
 def question_page(q_number):
     """Display survey question."""
-    if int(q_number) != len(responses):
+    responses_length = len(session["responses"])
+    print(q_number)
+    print(responses_length)
+    if q_number != responses_length:
         flash("ERROR: Access denied. Please submit response to current question.")
-        return redirect(url_for('question_page', q_number=str(len(responses))))
+        return redirect(url_for('question_page', q_number=str(responses_length)))
     else:
-        survey_question = satisfaction_survey.questions[int(q_number)]
+        survey_question = satisfaction_survey.questions[q_number]
         question = survey_question.question
         choices = survey_question.choices
-        return render_template("questions.html", survey_title=satisfaction_survey_title, q_number=q_number, question=question, choices=choices)
+        return render_template("questions.html", survey_title=satisfaction_survey_title, q_number=str(responses_length), question=question, choices=choices)
 
 
 @app.route('/answer', methods=["POST"])
 def handle_answers():
     """Append answers to responses list and redirect to the next question."""
     answer = request.form["answer"]
+    responses = session["responses"]
     responses.append(answer)
-    q_number = request.form["q_number"]
-    next_q_number = str(int(q_number) + 1)
-    return redirect(url_for('question_page', q_number=next_q_number) if int(next_q_number) < len(satisfaction_survey.questions) else '/thank-you')
+    session["responses"] = responses
+    responses_length = len(session["responses"])
+    return redirect(url_for('question_page', q_number=str(responses_length)) if responses_length < len(satisfaction_survey.questions) else '/thank-you')
 
 
 @app.route('/thank-you')
