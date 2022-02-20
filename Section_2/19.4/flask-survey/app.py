@@ -31,8 +31,6 @@ def set_up_session():
 def question_page(q_number):
     """Display survey question."""
     responses_length = len(session["responses"])
-    print(q_number)
-    print(responses_length)
     if q_number != responses_length:
         flash("ERROR: Access denied. Please submit response to current question.")
         return redirect(url_for('question_page', q_number=str(responses_length)))
