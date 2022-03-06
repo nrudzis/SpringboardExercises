@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Boggle</title>
+</head>
+<body>
+    <h1>Boggle</h1>
+    <table>
+    {% for row in board %}
+        <tr>
+        {% for letter in row %}
+            <td>{{ letter }}</td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+    </table>
+</body>
+</html>
