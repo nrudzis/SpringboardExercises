@@ -1,11 +1,11 @@
-$(document).ready(function() {
+function timeout() {
   const $wordSubmit = $('#wordSubmit');
   const $wordInput = $('#wordInput');
   setTimeout(function() {
     $wordSubmit.prop('disabled', true);
     $wordInput.prop('disabled', true);
   }, 60000);
-});
+}
 
 function keepScore(word, result) {
   if(result === "ok") {
@@ -29,4 +29,5 @@ async function checkWord(e) {
   keepScore(word, result);
 }
 
+$(document).ready(timeout());
 $('#word-form').on('submit', checkWord);
