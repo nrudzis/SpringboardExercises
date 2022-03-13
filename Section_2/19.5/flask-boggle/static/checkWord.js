@@ -1,3 +1,12 @@
+$(document).ready(function() {
+  const $wordSubmit = $('#wordSubmit');
+  const $wordInput = $('#wordInput');
+  setTimeout(function() {
+    $wordSubmit.prop('disabled', true);
+    $wordInput.prop('disabled', true);
+  }, 60000);
+});
+
 function keepScore(word, result) {
   if(result === "ok") {
     let score = parseInt($('#score').text());
@@ -8,7 +17,7 @@ function keepScore(word, result) {
 
 async function checkWord(e) {
   e.preventDefault();
-  const word = $('#word').val();
+  const word = $('#wordInput').val();
   const response = await axios.get('/check-word', { params: { word } });
   const result = response.data.result;
   const $message = $(`<p>${ word } is ${ result.replace(/-/g, " ") }</p>`);
@@ -16,7 +25,7 @@ async function checkWord(e) {
     $('#word-form').next('p').remove();
   }
   $('#word-form').after($message);
-  $('#word').val('');
+  $('#wordInput').val('');
   keepScore(word, result);
 }
 
