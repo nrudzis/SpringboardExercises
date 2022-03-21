@@ -32,6 +32,7 @@ async function checkWord(e) {
   }
   $('#word-form').after($message);
   $('#wordInput').val('');
+  $('#wordInput').focus();
   keepScore(word, result);
 }
 

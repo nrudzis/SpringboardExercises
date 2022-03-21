@@ -12,8 +12,8 @@ boggle_game = Boggle()
 
 
 @app.route('/')
-def boggle_board_page():
-    """Render game board and display form to submit word."""
+def render_board_page():
+    """Render board page and display form to submit word."""
     session["board"] = boggle_game.make_board()
     board = session["board"]
     return render_template("boggle.html", board=board)
@@ -26,6 +26,7 @@ def check_word():
     word = request.args.get("word")
     result = boggle_game.check_valid_word(board, word)
     return jsonify({"result": result})
+
 
 @app.route('/scores', methods=["POST"])
 def track_scores():
