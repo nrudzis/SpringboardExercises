@@ -1,9 +1,15 @@
+async function submitScore() {
+  let score = parseInt($('#score').text());
+  const response = await axios.post('/scores', { score });
+}
+
 function timeout() {
   const $wordSubmit = $('#wordSubmit');
   const $wordInput = $('#wordInput');
   setTimeout(function() {
     $wordSubmit.prop('disabled', true);
     $wordInput.prop('disabled', true);
+    submitScore();
   }, 60000);
 }
 

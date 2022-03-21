@@ -26,3 +26,11 @@ def check_word():
     word = request.args.get("word")
     result = boggle_game.check_valid_word(board, word)
     return jsonify({"result": result})
+
+@app.route('/scores', methods=["POST"])
+def track_scores():
+    """Track scores from all games."""
+    scores = {}
+    new_score = request.json
+    scores[len(scores) + 1] = new_score
+    return jsonify(scores)
