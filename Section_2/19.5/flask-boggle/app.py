@@ -9,6 +9,7 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
 boggle_game = Boggle()
+scores = {}
 
 
 @app.route('/')
@@ -31,7 +32,8 @@ def check_word():
 @app.route('/scores', methods=["POST"])
 def track_scores():
     """Track scores from all games."""
-    scores = {}
     new_score = request.json
     scores[len(scores) + 1] = new_score
+    import pdb
+    pdb.set_trace()
     return jsonify(scores)
