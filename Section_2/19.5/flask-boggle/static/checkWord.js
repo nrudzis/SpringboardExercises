@@ -55,7 +55,6 @@ async function checkWord(e) {
     addMessage( $(`<p>${word} already submitted!</p>`) );
   } else {
     words.push(word);
-    console.log(words);
     const response = await axios.get('/check-word', { params: { word } });
     const result = response.data.result;
     addMessage( $(`<p>${ word } is ${ result.replace(/-/g, " ") }</p>`) );

@@ -34,7 +34,4 @@ def track_scores():
     """Track scores from all games."""
     new_score = request.json
     scores[len(scores) + 1] = new_score
-    import json
-    json_scores = json.dumps(scores)
-    print(json_scores)
     return json_scores
