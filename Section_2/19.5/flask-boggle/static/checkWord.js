@@ -62,5 +62,5 @@ async function checkWord(e) {
   }
 }
 
-$(document).ready(timeout());
+$(document).ready(timeout);
 $('#word-form').on('submit', checkWord);

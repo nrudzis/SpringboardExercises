@@ -34,4 +34,4 @@ def track_scores():
     """Track scores from all games."""
     new_score = request.json
     scores[len(scores) + 1] = new_score
-    return json_scores
+    return jsonify(scores)
