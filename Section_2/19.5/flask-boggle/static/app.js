@@ -1,18 +1,6 @@
 class Boggle {
-
   constructor() {
     this.words = [];
-  }
-
-  async submitScore() {
-    let score = parseInt($('#score').text());
-    const response = await axios.post('/scores', { score });
-  }
-
-  removeMessage() {
-    if( $('#word-form').next('p') ) {
-      $('#word-form').next('p').remove();
-    }
   }
 
   toggleWordForm() {
@@ -20,21 +8,14 @@ class Boggle {
     $('#word-input').prop('disabled') ? $('#word-input').prop('disabled', false) : $('#word-input').prop('disabled', true);
   }
 
-  timeout = () => {
-    setTimeout(() => {
-      this.toggleWordForm();
-      this.submitScore();
-      this.removeMessage();
-      const $newGameButton = $(`<button>New Game</button>`).click(this.newGame);
-      $('#word-form').after($newGameButton);
-    }, 60000);
+  async submitScore() {
+    let score = parseInt( $('#score').text() );
+    const response = await axios.post('/scores', { score });
   }
 
-  keepScore(word, result) {
-    if(result === "ok") {
-      let score = parseInt($('#score').text());
-      score = score + word.length;
-      $('#score').text(score.toString());
+  removeMessage() {
+    if( $('#word-form').next('p') ) {
+      $('#word-form').next('p').remove();
     }
   }
 
@@ -45,6 +26,14 @@ class Boggle {
     $('#word-input').focus();
   }
   
+  updateScoreDisplay(word, result) {
+    if(result === "ok") {
+      let score = parseInt( $('#score').text() );
+      score = score + word.length;
+      $('#score').text(score.toString());
+    }
+  }
+ 
   async checkWord(word) {
     const response = await axios.get('/check-word', { params: { word } });
     return response.data.result;
@@ -61,7 +50,7 @@ class Boggle {
       if(result === "ok") {
         this.words.push(word);
       }
-      this.keepScore(word, result);
+      this.updateScoreDisplay(word, result);
     }
   }
 
@@ -76,6 +65,15 @@ class Boggle {
     });
   }
 
+  timeout = () => {
+    setTimeout(() => {
+      this.toggleWordForm();
+      this.submitScore();
+      this.removeMessage();
+      const $newGameButton = $(`<button>New Game</button>`).click(this.newGame);
+      $('#word-form').after($newGameButton);
+    }, 60000);
+  }
 }
 
 let boggle = new Boggle();
