@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Boggle</title>
+  <meta charset="UTF-8">
+  <title>Boggle</title>
 </head>
 <body>
+  <section id="game-area">
     <h1>Boggle</h1>
     <table>
     {% for row in board %}
-        <tr>
-        {% for letter in row %}
-            <td>{{ letter }}</td>
-        {% endfor %}
-        </tr>
+      <tr>
+      {% for letter in row %}
+        <td>{{ letter }}</td>
+      {% endfor %}
+      </tr>
     {% endfor %}
     </table>
     <form id="word-form" action="/check-word">
-        <input type="text" id="wordInput" name="word" placeholder="your word">
-        <input type="submit" id="wordSubmit" value="Check Word">
+      <input type="text" id="wordInput" name="word" placeholder="your word">
+      <input type="submit" id="wordSubmit" value="Check Word">
     </form>
     <h2>Your Score: <span id="score">0</span></h2>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="/static/checkWord.js"></script>
+  </section>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="/static/app.js"></script>
 </body>
 </html>
