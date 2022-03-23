@@ -16,8 +16,8 @@ class Boggle {
   }
 
   toggleWordForm() {
-    $('#wordSubmit').prop('disabled') ? $('#wordSubmit').prop('disabled', false) : $('#wordSubmit').prop('disabled', true);
-    $('#wordInput').prop('disabled') ? $('#wordInput').prop('disabled', false) : $('#wordInput').prop('disabled', true);
+    $('#word-submit').prop('disabled') ? $('#word-submit').prop('disabled', false) : $('#word-submit').prop('disabled', true);
+    $('#word-input').prop('disabled') ? $('#word-input').prop('disabled', false) : $('#word-input').prop('disabled', true);
   }
 
   timeout = () => {
@@ -41,8 +41,8 @@ class Boggle {
   addMessage(message) {
     this.removeMessage();
     $('#word-form').after(message);
-    $('#wordInput').val('');
-    $('#wordInput').focus();
+    $('#word-input').val('');
+    $('#word-input').focus();
   }
   
   async checkWord(word) {
@@ -52,7 +52,7 @@ class Boggle {
 
   async handleWordSubmit(e) {
     e.preventDefault(e);
-    const word = $('#wordInput').val();
+    const word = $('#word-input').val();
     if(this.words.indexOf(word) >= 0) {
       this.addMessage( $(`<p>${word} already submitted!</p>`) );
     } else {
