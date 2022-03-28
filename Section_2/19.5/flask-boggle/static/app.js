@@ -25,7 +25,7 @@ class Boggle {
     $('#word-input').val('');
     $('#word-input').focus();
   }
-  
+
   updateScoreDisplay(word, result) {
     if(result === "ok") {
       let score = parseInt( $('#score').text() );
@@ -33,7 +33,7 @@ class Boggle {
       $('#score').text(score.toString());
     }
   }
- 
+
   async checkWord(word) {
     const response = await axios.get('/check-word', { params: { word } });
     return response.data.result;
@@ -42,7 +42,9 @@ class Boggle {
   async handleWordSubmit(e) {
     e.preventDefault(e);
     const word = $('#word-input').val();
-    if(this.words.indexOf(word) >= 0) {
+    if(word === '') {
+      this.addMessage('<p>Please submit a word.</p>');
+    } else if(this.words.indexOf(word) >= 0){
       this.addMessage( $(`<p>${word} already submitted!</p>`) );
     } else {
       const result = await this.checkWord(word);
