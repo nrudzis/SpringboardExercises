@@ -4,6 +4,12 @@ from flask import session
 from boggle import Boggle
 import string
 
+# Enable testing mode
+app.config['TESTING'] = True
+
+# Don't use Flask DebugToolbar hack
+app.config['DEBUG_TB_HOSTS'] = ['dont-show-debug-toolbar']
+
 
 class BoggleViewsTests(TestCase):
 
