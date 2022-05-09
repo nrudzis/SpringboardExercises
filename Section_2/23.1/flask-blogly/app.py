@@ -14,3 +14,14 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
 connect_db(app)
+
+@app.route('/')
+def redirect_to_users():
+    """TO BE MODIFIED LATER."""
+    return redirect('/users')
+
+@app.route('/users')
+def display_users():
+    """Display list of users."""
+    users = User.query.all()
+    return render_template("users.html", users=users)
