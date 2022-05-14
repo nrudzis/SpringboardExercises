@@ -31,3 +31,17 @@ def display_user_info(user_id):
     """Render user info page."""
     user = User.query.get_or_404(user_id)
     return render_template("user-info.html", user=user)
+
+@app.route('/users/new', methods=['GET', 'POST'])
+def add_new_user():
+    """Render page with form to add new user."""
+    if request.method == 'POST':
+        first_name = request.form["first-name"]
+        last_name = request.form["last-name"]
+        image_url = request.form["image-url"]
+        new_user = User(first_name=first_name, last_name=last_name, image_url=image_url)
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect('/users')
+    else:
+        return render_template("new-user.html")
