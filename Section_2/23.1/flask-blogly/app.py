@@ -2,7 +2,7 @@
 
 from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db
+from models import db, connect_db, User
 
 app = Flask(__name__)
 
@@ -22,6 +22,6 @@ def redirect_to_users():
 
 @app.route('/users')
 def display_users():
-    """Display list of users."""
+    """Render user list page."""
     users = User.query.all()
     return render_template("users.html", users=users)
