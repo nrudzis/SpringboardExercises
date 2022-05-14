@@ -25,3 +25,9 @@ def display_users():
     """Render user list page."""
     users = User.query.all()
     return render_template("users.html", users=users)
+
+@app.route('/users/<user_id>')
+def display_user_info(user_id):
+    """Render user info page."""
+    user = User.query.get_or_404(user_id)
+    return render_template("user-info.html", user=user)
