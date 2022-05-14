@@ -39,7 +39,10 @@ def add_new_user():
         first_name = request.form["first-name"]
         last_name = request.form["last-name"]
         image_url = request.form["image-url"]
-        new_user = User(first_name=first_name, last_name=last_name, image_url=image_url)
+        if image_url != '':
+            new_user = User(first_name=first_name, last_name=last_name, image_url=image_url)
+        else:
+            new_user = User(first_name=first_name, last_name=last_name)
         db.session.add(new_user)
         db.session.commit()
         return redirect('/users')
