@@ -32,5 +32,5 @@ class User(db.Model):
     image_url = db.Column(
         db.String(100),
         nullable=False,
-        default='https://cdn-icons-png.flaticon.com/512/1946/1946429.png'
+        default='/static/user-solid.svg'
     )

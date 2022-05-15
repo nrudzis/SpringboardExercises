@@ -15,6 +15,7 @@ debug = DebugToolbarExtension(app)
 
 connect_db(app)
 
+
 @app.route('/')
 def redirect_to_users():
     """TO BE MODIFIED LATER."""
@@ -31,6 +32,27 @@ def display_user_info(user_id):
     """Render user info page."""
     user = User.query.get_or_404(user_id)
     return render_template("user-info.html", user=user)
+
+@app.route('/users/<user_id>/edit', methods=['GET', 'POST'])
+def edit_user(user_id):
+    """Render page with form to edit existing user."""
+    user = User.query.get(user_id)
+    if request.method == 'POST':
+        user.first_name = request.form["first-name"]
+        user.last_name = request.form["last-name"]
+        user.image_url = request.form["image-url"]
+        db.session.add(user)
+        db.session.commit()
+        return redirect('/users')
+    else:
+        return render_template("edit-user.html", user=user)
+
+@app.route('/users/<user_id>/delete')
+def delete_user(user_id):
+    """Delete user."""
+    User.query.filter_by(user_id=user_id).delete()
+    db.session.commit()
+    return redirect('/users')
 
 @app.route('/users/new', methods=['GET', 'POST'])
 def add_new_user():

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}{{ user.first_name }} {{ user.last_name }}{% endblock %}
 {% block content %}
-<img class="align-top m-2" style="width: 100px" src="{{ user.image_url }}">
+<img class="align-top m-2" style="width: 75px" src="{{ user.image_url }}">
 <section class="d-inline-block">
     <h1>{{ user.first_name }} {{ user.last_name }}</h1>
     <a href="/users/{{ user.user_id }}/edit" class="btn btn-primary">Edit</a>
