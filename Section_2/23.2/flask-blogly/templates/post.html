@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+<h1>{{ post.title }}</h1>
+<p>{{ post.content }}</p>
+<p style="font-style: italic">By {{ post.user.first_name }} {{ post.user.last_name }}</p>
+<a href="/users/{{ post.user.user_id }}" class="btn btn-outline-primary">Cancel</a>
+<a href="/posts/{{ post.post_id }}/edit" class="btn btn-primary">Edit</a>
+<a href="/posts/{{ post.post_id }}/delete" class="btn btn-danger">Delete</a>
+{% endblock %}

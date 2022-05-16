@@ -2,7 +2,7 @@
 
 from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 
 app = Flask(__name__)
 
@@ -70,3 +70,9 @@ def add_new_user():
         return redirect('/users')
     else:
         return render_template("new-user.html")
+
+@app.route('/posts/<post_id>')
+def display_post(post_id):
+    """Render post page."""
+    post = Post.query.get_or_404(post_id)
+    return render_template("post.html", post=post)
