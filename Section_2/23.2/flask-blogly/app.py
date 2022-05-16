@@ -76,3 +76,25 @@ def display_post(post_id):
     """Render post page."""
     post = Post.query.get_or_404(post_id)
     return render_template("post.html", post=post)
+
+@app.route('/posts/<post_id>/edit', methods=['GET', 'POST'])
+def edit_post(post_id):
+    """Render page with form to edit existing post."""
+    post = Post.query.get(post_id)
+    if request.method == 'POST':
+        post.title = request.form["post-title"]
+        post.content = request.form["post-content"]
+        db.session.add(post)
+        db.session.commit()
+        return redirect(f'/posts/{post_id}')
+    else:
+        return render_template("edit-post.html" , post=post)
+
+@app.route('/posts/<post_id>/delete')
+def delete_post(post_id):
+    """Delete post."""
+    post = Post.query.filter_by(post_id=post_id)
+    user_id = post.first().user_id
+    post.delete()
+    db.session.commit()
+    return redirect(f'/users/{user_id}')
