@@ -64,7 +64,8 @@ class Post(db.Model):
     )
 
     user_id = db.Column(
-        db.Integer, db.ForeignKey('users.user_id')
+        db.Integer,
+        db.ForeignKey('users.user_id')
     )
 
     user = db.relationship('User', backref='posts')
