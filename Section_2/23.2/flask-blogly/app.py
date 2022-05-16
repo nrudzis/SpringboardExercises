@@ -71,6 +71,20 @@ def add_new_user():
     else:
         return render_template("new-user.html")
 
+@app.route('/users/<user_id>/posts/new', methods=['GET', 'POST'])
+def add_new_post(user_id):
+    """Render page with form to add new post."""
+    if request.method == 'POST':
+        post_title = request.form["post-title"]
+        post_content = request.form["post-content"]
+        new_post = Post(title=post_title, content=post_content, user_id=user_id)
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(f'/users/{user_id}')
+    else:
+        user = User.query.get(user_id)
+        return render_template("new-post.html", user=user)
+
 @app.route('/posts/<post_id>')
 def display_post(post_id):
     """Render post page."""
