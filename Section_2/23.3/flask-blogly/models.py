@@ -70,3 +70,38 @@ class Post(db.Model):
         db.ForeignKey('users.user_id', ondelete='CASCADE'),
         nullable=False
     )
+
+    tags = db.relationship('Tag', secondary='posts_tags', backref='post')
+
+class Tag(db.Model):
+    """Tag model."""
+
+    __tablename__ = 'tags'
+
+    tag_id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+
+    name = db.Column(
+        db.String(20),
+        nullable=False
+    )
+
+class PostTag(db.Model):
+    """PostTag model."""
+
+    __tablename__ = 'posts_tags'
+
+    post_id = db.Column(
+        db.Integer,
+        db.ForeignKey('posts.post_id'),
+        primary_key=True
+    )
+
+    tag_id = db.Column(
+        db.Integer,
+        db.ForeignKey('tags.tag_id'),
+        primary_key=True
+    )
