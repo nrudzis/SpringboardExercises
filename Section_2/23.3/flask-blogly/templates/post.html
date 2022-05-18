@@ -7,9 +7,11 @@
 <p style="font-weight: bold">
 {% if post.tags %}
 Tags:
-    {% for tag in post.tags %}
-        <span style="font-style: italic" class="badge bg-primary">{{ tag.name }}</span>
-    {% endfor %}
+{% for tag in post.tags %}
+    <a href="/tags/{{ tag.tag_id }}" style="font-style: italic; text-decoration: none; color: #fff;" class="badge bg-primary">
+        {{ tag.name }}
+    </a>
+{% endfor %}
 {% endif %}
 </p>
 <a href="/users/{{ post.user_id }}" class="btn btn-outline-primary">Cancel</a>

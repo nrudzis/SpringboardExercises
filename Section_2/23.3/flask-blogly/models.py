@@ -73,6 +73,8 @@ class Post(db.Model):
 
     tags = db.relationship('Tag', secondary='posts_tags', backref='posts')
 
+    post_tags = db.relationship('PostTag', backref='post', cascade='all, delete, delete-orphan', passive_deletes=True)
+
 class Tag(db.Model):
     """Tag model."""
 
@@ -89,6 +91,8 @@ class Tag(db.Model):
         nullable=False
     )
 
+    tag_posts = db.relationship('PostTag', backref='tag', cascade='all, delete, delete-orphan', passive_deletes=True)
+
 class PostTag(db.Model):
     """PostTag model."""
 
@@ -96,12 +100,12 @@ class PostTag(db.Model):
 
     post_id = db.Column(
         db.Integer,
-        db.ForeignKey('posts.post_id'),
+        db.ForeignKey('posts.post_id', ondelete='CASCADE'),
         primary_key=True
     )
 
     tag_id = db.Column(
         db.Integer,
-        db.ForeignKey('tags.tag_id'),
+        db.ForeignKey('tags.tag_id', ondelete='CASCADE'),
         primary_key=True
     )

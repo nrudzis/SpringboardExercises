@@ -163,3 +163,10 @@ def edit_tag(tag_id):
         return redirect('/tags')
     else:
         return render_template("edit-tag.html", tag=tag)
+
+@app.route('/tags/<tag_id>/delete')
+def delete_tag(tag_id):
+    """Delete tag."""
+    tag = Tag.query.filter_by(tag_id=tag_id).delete()
+    db.session.commit()
+    return redirect('/tags')
