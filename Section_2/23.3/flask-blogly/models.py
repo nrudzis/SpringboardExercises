@@ -36,6 +36,8 @@ class User(db.Model):
         default='/static/user-solid.svg'
     )
 
+    posts = db.relationship('Post', backref='user', cascade='all, delete, delete-orphan', passive_deletes=True)
+
 class Post(db.Model):
     """Post model."""
 
@@ -68,5 +70,3 @@ class Post(db.Model):
         db.ForeignKey('users.user_id', ondelete='CASCADE'),
         nullable=False
     )
-
-    user = db.relationship('User', backref='posts', passive_deletes=True)
