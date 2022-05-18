@@ -2,7 +2,7 @@
 
 from flask import Flask, request, render_template, redirect, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 
 app = Flask(__name__)
 
@@ -112,3 +112,27 @@ def delete_post(post_id):
     post.delete()
     db.session.commit()
     return redirect(f'/users/{user_id}')
+
+@app.route('/tags')
+def display_tags():
+    """Render tag list page."""
+    tags = Tag.query.all()
+    return render_template("tags.html", tags=tags)
+
+@app.route('/tags/<tag_id>')
+def display_tag_info(tag_id):
+    """Render tag info page."""
+    tag = Tag.query.get_or_404(tag_id)
+    return render_template("tag-info.html", tag=tag)
+
+@app.route('/tags/new', methods=['GET', 'POST'])
+def add_new_tag():
+    """Render page with form to add new tag."""
+    if request.method == 'POST':
+        tag_name = request.form["tag-name"]
+        new_tag = Tag(name=tag_name)
+        db.session.add(new_tag)
+        db.session.commit()
+        return redirect('/tags')
+    else:
+        return render_template("new-tag.html")
