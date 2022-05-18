@@ -71,7 +71,7 @@ class Post(db.Model):
         nullable=False
     )
 
-    tags = db.relationship('Tag', secondary='posts_tags', backref='post')
+    tags = db.relationship('Tag', secondary='posts_tags', backref='posts')
 
 class Tag(db.Model):
     """Tag model."""

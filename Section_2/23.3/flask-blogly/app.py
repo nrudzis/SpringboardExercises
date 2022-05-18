@@ -77,13 +77,20 @@ def add_new_post(user_id):
     if request.method == 'POST':
         post_title = request.form["post-title"]
         post_content = request.form["post-content"]
+        tag_ids = request.form.getlist("tag-ids")
         new_post = Post(title=post_title, content=post_content, user_id=user_id)
         db.session.add(new_post)
+        if tag_ids:
+            db.session.flush()
+            for tag_id in tag_ids:
+                post_tag = PostTag(post_id=new_post.post_id, tag_id=tag_id)
+                db.session.add(post_tag)
         db.session.commit()
         return redirect(f'/users/{user_id}')
     else:
         user = User.query.get(user_id)
-        return render_template("new-post.html", user=user)
+        tags = Tag.query.all()
+        return render_template("new-post.html", user=user, tags=tags)
 
 @app.route('/posts/<post_id>')
 def display_post(post_id):
@@ -98,11 +105,19 @@ def edit_post(post_id):
     if request.method == 'POST':
         post.title = request.form["post-title"]
         post.content = request.form["post-content"]
+        tag_ids = request.form.getlist("tag-ids")
+        PostTag.query.filter_by(post_id=post_id).delete()
+        if tag_ids:
+            for tag_id in tag_ids:
+                post_tag = PostTag(post_id=post_id, tag_id=tag_id)
+                db.session.add(post_tag)
         db.session.add(post)
         db.session.commit()
         return redirect(f'/posts/{post_id}')
     else:
-        return render_template("edit-post.html" , post=post)
+        tags = Tag.query.all()
+        print(post.tags)
+        return render_template("edit-post.html" , post=post, tags=tags)
 
 @app.route('/posts/<post_id>/delete')
 def delete_post(post_id):
@@ -136,3 +151,15 @@ def add_new_tag():
         return redirect('/tags')
     else:
         return render_template("new-tag.html")
+
+@app.route('/tags/<tag_id>/edit', methods=['GET', 'POST'])
+def edit_tag(tag_id):
+    """Render page with form to edit existing tag."""
+    tag = Tag.query.get(tag_id)
+    if request.method == 'POST':
+        tag.name = request.form["tag-name"]
+        db.session.add(tag)
+        db.session.commit()
+        return redirect('/tags')
+    else:
+        return render_template("edit-tag.html", tag=tag)
