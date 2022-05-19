@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Add New Pet{% endblock %}
+{% block h1 %}Add New Pet{% endblock %}
+{% block content %}
+<form method="post">
+    {{ form.hidden_tag() }}
+    {% for field in form if field.widget.input_type != 'hidden' %}
+    <div class="mb-3">
+        {{ field.label(class_="form-label") }}
+        {{ field(class_="form-control") }}
+    </div>
+    {% endfor %}
+    <input type="submit" class="btn btn-success" value="Add">
+</form>
+{% endblock %}
