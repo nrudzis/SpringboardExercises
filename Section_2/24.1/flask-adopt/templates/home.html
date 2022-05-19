@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block h1 %}Pets{% endblock %}
+{% block content %}
+    <div class="row">
+        {% for pet in pets %}
+        <div class="col-sm">
+            <img src="{{ pet.photo_url if pet.photo_url != ''}}" class="img-thumbnail">
+            <p class="{{ 'text-success' if pet.available else 'text-danger' }}">{{ pet.name }} <span class="fw-bold">is {{ "available" if pet.available else "not available" }}</span></p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
