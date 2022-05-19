@@ -5,7 +5,9 @@
     <div class="row">
         {% for pet in pets %}
         <div class="col-sm-4">
-            <img src="{{ pet.photo_url if pet.photo_url != ''}}" class="img-thumbnail">
+            <a href="/{{ pet.pet_id }}">
+                <img src="{{ pet.photo_url }}" class="img-thumbnail">
+            </a>
             <p class="{{ 'text-success' if pet.available else 'text-danger' }}">{{ pet.name }} <span class="fw-bold">is {{ "available" if pet.available else "not available" }}</span></p>
         </div>
         {% endfor %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}{{ pet.name }}{% endblock %}
+{% block h1 %}{{ pet.name }}{% endblock %}
+{% block content %}
+    <img src="{{ pet.photo_url }}" class="img-thumbnail">
+<h2 class="my-3 text-secondary">Current Info</h2>
+<ul>
+    <li>Name: {{ pet.name }}</li>
+    <li>Speices: {{ pet.species }}</li>
+    <li>Age: {{ pet.age }}</li>
+</ul>
+<h2 class="my-3 text-secondary">Edit</h2>
+<form method="post">
+    {{ form.hidden_tag() }}
+    {% for field in form if field.widget.input_type != 'hidden' %}
+    <div class="mb-3">
+        {{ field.label(class_="form-check-label") if field.type == 'BooleanField' else field.label(class_="form-label") }}
+        {{ field(class_="form-check-input") if field.type == 'BooleanField' else field(class_="form-control") }}
+        {% for e in field.errors %}
+        <small class="text-danger">
+            {{ e }}
+        </small>
+        {% endfor %}
+    </div>
+    {% endfor %}
+    <input type="submit" class="btn btn-success" value="Edit">
+</form>
+{% endblock %}
