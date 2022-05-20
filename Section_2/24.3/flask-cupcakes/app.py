@@ -16,6 +16,12 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 
 
+@app.route('/')
+def index_page():
+    """Render index page."""
+    return render_template('index.html')
+
+
 @app.route('/api/cupcakes')
 def all_cupcake_data():
     """Get data about all cupcakes."""

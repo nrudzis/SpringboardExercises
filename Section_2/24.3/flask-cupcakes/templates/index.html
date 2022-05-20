@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>Cupcakes</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-3 text-secondary">Cupcakes</h1>
+        <ul id="cupcake-list">
+        </ul>
+        <h2 class="my-3 text-secondary">Add New Cupcake</h2>
+        <form id="new-cupcake-form">
+            <div class="mb-3">
+                <label for="flavor-input" class="form-label">Flavor</label>
+                <input type="text" class="form-control" id="flavor-input">
+            </div>
+            <div class="mb-3">
+                <label for="rating-select" class="form-label">Rating</label>
+                <select class="form-select" id="rating-select">
+                    <option selected>Select</option>
+                    {% for rating in range(11) %}
+                    <option value="{{ rating }}">{{ rating }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="size-select" class="form-label">Size</label>
+                <select class="form-select" id="size-select">
+                    <option selected>Select</option>
+                    <option value="small">Small</option>
+                    <option value="medium">Medium</option>
+                    <option value="large">Large</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="image-input" class="form-label">Image URL</label>
+                <input type="text" class="form-control" id="image-input">
+            </div>
+            <button type="submit" class="btn btn-success">Add</button>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/static/cupcakes.js"></script>
+</body>
+</html>
