@@ -35,3 +35,12 @@ class Cupcake(db.Model):
         default='https://tinyurl.com/demo-cupcake',
         nullable=False
     )
+
+    def serialize(self):
+        return {
+            'cupcake_id': self.cupcake_id,
+            'flavor': self.flavor,
+            'size': self.size,
+            'rating': self.rating,
+            'image': self.image
+        }
