@@ -1,0 +1,67 @@
+"""Feedback application."""
+
+from flask import Flask, request, render_template, redirect
+from flask_debugtoolbar import DebugToolbarExtension
+from models import db, connect_db, User
+from forms import RegisterForm, LoginForm
+
+app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///feedback'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
+app.config['SECRET_KEY'] = 'secret'
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+debug = DebugToolbarExtension(app)
+
+connect_db(app)
+
+
+@app.route('/')
+def redirect_to_register():
+    """Redirect to register."""
+    return redirect('/register')
+
+
+@app.route('/secret')
+def secret_route():
+    """Secret route."""
+    return('You made it!')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register_new_user():
+    """
+    Render registration form page.
+    Redirect to /secret on form submit.
+    """
+    form = RegisterForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        email = form.email.data
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        new_user = User.register(username=username, password=password, email=email, first_name=first_name, last_name=last_name)
+        db.session.add(new_user)
+        db.session.commit()
+        return redirect('/secret')
+    return render_template('register.html', form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def authenticate_user():
+    """
+    Render login form page.
+    Authenticate user on form submit and redirect to /secret.
+    """
+    form = LoginForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        user = User.authenticate(username=username, password=password)
+        if user:
+            return redirect('/secret')
+        else:
+            form.username.errors = ['Username or password is invalid.']
+    return render_template('login.html', form=form)

@@ -5,7 +5,7 @@ from flask_bcrypt import Bcrypt
 
 db = SQLAlchemy()
 
-def connect_db(app)
+def connect_db(app):
     db.app = app
     db.init_app(app)
 
