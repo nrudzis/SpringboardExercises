@@ -23,20 +23,21 @@ def redirect_to_register():
     return redirect('/register')
 
 
-@app.route('/secret')
-def secret_route():
-    """Secret route."""
+@app.route('/users/<username>')
+def user_info(username):
+    """Render user info page."""
     if "username" not in session:
         flash('You need to log in to do that!')
         return redirect('/login')
-    return('You made it!')
+    user = User.query.get_or_404(username)
+    return render_template('user-info.html', user=user)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register_new_user():
     """
     Render registration form page.
-    Redirect to /secret on form submit.
+    Redirect to user infor page on form submit.
     """
     form = RegisterForm()
     if form.validate_on_submit():
@@ -49,7 +50,7 @@ def register_new_user():
         db.session.add(new_user)
         db.session.commit()
         session['username'] = new_user.username
-        return redirect('/secret')
+        return redirect(f'/users/{new_user.username}')
     return render_template('register.html', form=form)
 
 
@@ -57,7 +58,7 @@ def register_new_user():
 def authenticate_user():
     """
     Render login form page.
-    Authenticate user on form submit and redirect to /secret.
+    Authenticate user on form submit and redirect to user info page.
     """
     form = LoginForm()
     if form.validate_on_submit():
@@ -67,7 +68,7 @@ def authenticate_user():
         if user:
             session['username'] = user.username
             flash(f'Welcome back {user.first_name}!')
-            return redirect('/secret')
+            return redirect(f'/users/{user.username}')
         else:
             form.username.errors = ['Username or password is invalid.']
     return render_template('login.html', form=form)
