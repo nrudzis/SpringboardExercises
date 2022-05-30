@@ -66,7 +66,16 @@ def authenticate_user():
         user = User.authenticate(username, password)
         if user:
             session['username'] = user.username
+            flash(f'Welcome back {user.first_name}!')
             return redirect('/secret')
         else:
             form.username.errors = ['Username or password is invalid.']
     return render_template('login.html', form=form)
+
+
+@app.route('/logout', methods=['POST'])
+def logout_user():
+    """Log out user."""
+    session.pop('username')
+    flash('Bye!')
+    return redirect('/')
