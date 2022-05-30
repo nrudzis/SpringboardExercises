@@ -37,7 +37,7 @@ def user_info(username):
 def register_new_user():
     """
     Render registration form page.
-    Redirect to user infor page on form submit.
+    Redirect to user info page on form submit.
     """
     form = RegisterForm()
     if form.validate_on_submit():

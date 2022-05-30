@@ -60,3 +60,37 @@ class User(db.Model):
             return u
         else:
             return False
+
+    feedback = db.relationship(
+        'Feedback',
+        backref='user',
+        cascade='all, delete, delete-orphan',
+        passive_deletes=True
+    )
+
+
+class Feedback(db.Model):
+    """Feedback model."""
+
+    __tablename__ = 'feedback'
+    feedback_id = db.Column(
+        db.Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+
+    title = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    content = db.Column(
+        db.Text,
+        nullable=False
+    )
+
+    username = db.Column(
+        db.String(20),
+        db.ForeignKey('users.username', ondelete='CASCADE'),
+        nullable=False
+    )
