@@ -1,6 +1,6 @@
 """Feedback application."""
 
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User
 from forms import RegisterForm, LoginForm
@@ -26,6 +26,9 @@ def redirect_to_register():
 @app.route('/secret')
 def secret_route():
     """Secret route."""
+    if "username" not in session:
+        flash('You need to log in to do that!')
+        return redirect('/login')
     return('You made it!')
 
 
@@ -45,6 +48,7 @@ def register_new_user():
         new_user = User.register(username, password, email, first_name, last_name)
         db.session.add(new_user)
         db.session.commit()
+        session['username'] = new_user.username
         return redirect('/secret')
     return render_template('register.html', form=form)
 
@@ -61,6 +65,7 @@ def authenticate_user():
         password = form.password.data
         user = User.authenticate(username, password)
         if user:
+            session['username'] = user.username
             return redirect('/secret')
         else:
             form.username.errors = ['Username or password is invalid.']
