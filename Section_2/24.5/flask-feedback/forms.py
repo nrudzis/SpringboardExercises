@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, TextAreaField
 from wtforms.validators import InputRequired, Email, Length
 
 class RegisterForm(FlaskForm):
@@ -43,6 +43,7 @@ class RegisterForm(FlaskForm):
         ]
     )
 
+
 class LoginForm(FlaskForm):
     username = StringField(
         'Username',
@@ -50,8 +51,26 @@ class LoginForm(FlaskForm):
             InputRequired()
         ]
     )
+
     password = PasswordField(
         'Password',
+        validators=[
+            InputRequired()
+        ]
+    )
+
+
+class FeedbackForm(FlaskForm):
+    title = StringField(
+        'Title',
+        validators=[
+            InputRequired(),
+            Length(min=1, max=100, message='Must be between %(min)d and %(max)d characters.')
+        ]
+    )
+
+    content = TextAreaField(
+        'Feedback',
         validators=[
             InputRequired()
         ]

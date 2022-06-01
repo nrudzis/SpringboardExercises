@@ -2,8 +2,8 @@
 
 from flask import Flask, request, render_template, redirect, session, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User
-from forms import RegisterForm, LoginForm
+from models import db, connect_db, User, Feedback
+from forms import RegisterForm, LoginForm, FeedbackForm
 
 app = Flask(__name__)
 
@@ -80,3 +80,23 @@ def logout_user():
     session.pop('username')
     flash('Bye!')
     return redirect('/')
+
+
+@app.route('/users/<username>/feedback/add', methods=['GET', 'POST'])
+def add_feedback(username):
+    """
+    Render feedback form page.
+    Add feedback and redirect to user info page on form submit.
+    """
+    if "username" not in session:
+        flash('You need to log in to do that!')
+        return redirect('/login')
+    form = FeedbackForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        content = form.content.data
+        new_feedback = Feedback(title=title, content=content, username=username)
+        db.session.add(new_feedback)
+        db.session.commit()
+        return redirect(f'/users/{username}')
+    return render_template('add-feedback.html', form=form)
