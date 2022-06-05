@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
-{% block title %}Login{% endblock %}
-{% block h1 %}Login{% endblock %}
+{% block title %}Add Feedback{% endblock %}
+{% block username %}{{ user.username }}{% endblock %}
+{% block user_first_last %}{{ user.first_name }} {{ user.last_name }}{% endblock %}
+{% block h1 %}Add Feedback{% endblock %}
 {% block content %}
 <form method="post">
     {{ form.hidden_tag() }}

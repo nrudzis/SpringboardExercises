@@ -26,11 +26,11 @@ def redirect_to_register():
 @app.route('/users/<username>')
 def user_info(username):
     """Render user info page."""
-    if "username" not in session:
+    if 'username' not in session:
         flash('You need to log in to do that!')
         return redirect('/login')
-    user = User.query.get_or_404(username)
-    return render_template('user-info.html', user=user)
+    loggedin_user = User.query.get_or_404(username)
+    return render_template('user-info.html', user=loggedin_user)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -40,6 +40,7 @@ def register_new_user():
     Redirect to user info page on form submit.
     """
     form = RegisterForm()
+    loggedin_user = User.query.get_or_404(session['username']) if 'username' in session else None
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
@@ -51,7 +52,7 @@ def register_new_user():
         db.session.commit()
         session['username'] = new_user.username
         return redirect(f'/users/{new_user.username}')
-    return render_template('register.html', form=form)
+    return render_template('register.html', form=form, user=loggedin_user)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -60,6 +61,7 @@ def authenticate_user():
     Render login form page.
     Authenticate user on form submit and redirect to user info page.
     """
+    loggedin_user = User.query.get_or_404(session['username']) if 'username' in session else None
     form = LoginForm()
     if form.validate_on_submit():
         username = form.username.data
@@ -71,7 +73,7 @@ def authenticate_user():
             return redirect(f'/users/{user.username}')
         else:
             form.username.errors = ['Username or password is invalid.']
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, user=loggedin_user)
 
 
 @app.route('/logout', methods=['POST'])
@@ -82,21 +84,85 @@ def logout_user():
     return redirect('/')
 
 
+@app.route('/users/<username>/delete', methods=['POST'])
+def delete_user(username):
+    """Delete user and redirect to root."""
+    if 'username' not in session:
+        flash('You need to log in to do that!')
+        return redirect('/login')
+    current_username = session['username']
+    if username == current_username:
+        user = User.query.get_or_404(username)
+        db.session.delete(user)
+        db.session.commit()
+        session.pop('username')
+        flash('Account successfully deleted!')
+        return redirect('/')
+    flash('Action not permitted!')
+    return redirect(f'/users/{current_username}')
+
+
 @app.route('/users/<username>/feedback/add', methods=['GET', 'POST'])
 def add_feedback(username):
     """
     Render feedback form page.
     Add feedback and redirect to user info page on form submit.
     """
-    if "username" not in session:
+    if 'username' not in session:
         flash('You need to log in to do that!')
         return redirect('/login')
-    form = FeedbackForm()
-    if form.validate_on_submit():
-        title = form.title.data
-        content = form.content.data
-        new_feedback = Feedback(title=title, content=content, username=username)
-        db.session.add(new_feedback)
+    current_username = session['username']
+    if username == current_username:
+        loggedin_user = User.query.get_or_404(current_username)
+        form = FeedbackForm()
+        if form.validate_on_submit():
+            title = form.title.data
+            content = form.content.data
+            new_feedback = Feedback(title=title, content=content, username=username)
+            db.session.add(new_feedback)
+            db.session.commit()
+            return redirect(f'/users/{username}')
+        return render_template('add-feedback.html', user=loggedin_user, form=form)
+    flash('Action not permitted!')
+    return redirect(f'/users/{current_username}')
+
+
+@app.route('/feedback/<feedback_id>/update', methods=['GET', 'POST'])
+def edit_feedback(feedback_id):
+    """
+    Render edit feedback form page.
+    Update feedback and redirect to user info page on form submit.
+    """
+    if 'username' not in session:
+        flash('You need to log in to do that!')
+        return redirect('/login')
+    feedback = Feedback.query.get_or_404(feedback_id)
+    current_username = session['username']
+    if feedback.username == current_username:
+        loggedin_user = User.query.get_or_404(current_username)
+        form = FeedbackForm(obj = feedback)
+        if form.validate_on_submit():
+            feedback.title = form.title.data
+            feedback.content = form.content.data
+            db.session.commit()
+            return redirect(f'/users/{feedback.username}')
+        return render_template('edit-feedback.html', user=loggedin_user, form=form)
+    flash('Action not permitted!')
+    return redirect(f'/users/{current_username}')
+
+
+@app.route('/feedback/<feedback_id>/delete', methods=['POST'])
+def delete_feedback(feedback_id):
+    """Delete feedback and redirect to user info page."""
+    if 'username' not in session:
+        flash('You need to log in to do that!')
+        return redirect('/login')
+    feedback = Feedback.query.get_or_404(feedback_id)
+    current_username = session['username']
+    if feedback.username == current_username:
+        db.session.delete(feedback)
         db.session.commit()
-        return redirect(f'/users/{username}')
-    return render_template('add-feedback.html', form=form)
+        flash('Feedback deleted!')
+        return redirect(f'/users/{current_username}')
+    flash('Action not permitted!')
+    return redirect(f'/users/{current_username}')

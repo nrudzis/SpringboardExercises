@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css" integrity="sha384-/frq1SRXYH/bSyou/HUp/hib7RVN1TawQYja658FEOodR/FQBKVqT9Ol+Oz3Olq5" crossorigin="anonymous"/>
     <title>Feedback - {% block title %}{% endblock %}</title>
 </head>
 <body>
@@ -10,7 +11,8 @@
         <div class="container">
             <a class="navbar-brand" href="/">Feedback</a>
             <div class="navbar-nav">
-            {% if session["username"] %}
+                {% if session["username"] %}
+                <a class="btn btn-link nav-link fw-semibold" href="/users/{% block username %}{% endblock %}">{% block user_first_last %}{% endblock %}</a>
                 <form action="/logout" method="post">
                     <input type="submit" class="btn btn-link nav-link" value="Log Out">
                 </form>

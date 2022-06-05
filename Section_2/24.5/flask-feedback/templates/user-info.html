@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}{{ user.first_name }} {{ user.last_name }}{% endblock %}
+{% block username %}{{ user.username }}{% endblock %}
+{% block user_first_last %}{{ user.first_name }} {{ user.last_name }}{% endblock %}
 {% block h1 %}{{ user.first_name }} {{ user.last_name }}{% endblock %}
 {% block content %}
 <h2 class="my-3">Info</h2>
@@ -9,5 +11,25 @@
     <li>Email: {{ user.email}}</li>
     <li>User Name: {{ user.username}}</li>
 </ul>
+{% if user.feedback %}
 <h2 class="my-3">Feedback</h2>
+{% for feedback in user.feedback %}
+<div class="card my-3">
+  <div class="card-body">
+    <h5 class="card-title">{{ feedback.title }}</h5>
+    <p class="card-text">{{ feedback.content }}</p>
+    <a href="/feedback/{{ feedback.feedback_id }}/update" class="btn btn-link btn-sm card-link text-secondary" role="button"><i class="fa-solid fa-pen"></i></a>
+    <form class="d-inline" action="/feedback/{{ feedback.feedback_id }}/delete" method="post">
+        <button class="btn btn-link btn-sm card-link text-danger"><i class="fa-solid fa-trash-can"></i></button>
+    </form>
+  </div>
+</div>
+{% endfor %}
+{% endif %}
+<div class="my-3">
+    <a href="/users/{{ user.username }}/feedback/add" class="btn btn-primary" role="button">Add Feedback</a>
+    <form class="d-inline" action="/users/{{ user.username }}/delete" method="post">
+        <button class="btn btn-danger">Delete Your Account</button>
+    </form>
+</div>
 {% endblock %}
