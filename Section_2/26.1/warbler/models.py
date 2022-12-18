@@ -150,6 +150,29 @@ class User(db.Model):
         return user
 
     @classmethod
+    def update(cls, curr_username, new_username, email, image_url, header_image_url, bio, password):
+        """
+        Updates user info.
+        """
+
+        user = cls.query.filter_by(username=curr_username).first()
+
+        if user:
+            is_auth = bcrypt.check_password_hash(user.password, password)
+            if is_auth:
+                user.username=new_username
+                user.email=email
+                user.image_url=image_url
+                user.header_image_url=header_image_url
+                user.bio=bio
+
+                db.session.add(user)
+                return user
+
+        return False
+
+
+    @classmethod
     def authenticate(cls, username, password):
         """Find user with `username` and `password`.
 
