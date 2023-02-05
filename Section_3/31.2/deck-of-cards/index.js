@@ -1,11 +1,16 @@
 const cardBtn = document.getElementById('draw-card-btn');
+const cardSection = document.getElementById('card-section');
 
 function drawCard(deckId) {
   axios
     .get(`https://deckofcardsapi.com/api/deck/${ deckId }/draw/?count=1`)
     .then(c => {
       if (c.data.remaining > 0) {
-        console.log(`${ c.data.cards[0]['value'] } of ${ c.data.cards[0]['suit'] }`);
+        const cardImg = c.data.cards[0]['images']['svg'];
+        const img = document.createElement('img');
+        img.src = cardImg;
+        img.classList.add('overlay');
+        cardSection.appendChild(img);
       } else {
         cardBtn.disabled = true;
       }
