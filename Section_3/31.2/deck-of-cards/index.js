@@ -4,7 +4,11 @@ function drawCard(deckId) {
   axios
     .get(`https://deckofcardsapi.com/api/deck/${ deckId }/draw/?count=1`)
     .then(c => {
-      console.log(`${ c.data.cards[0]['value'] } of ${ c.data.cards[0]['suit'] }`);
+      if (c.data.remaining > 0) {
+        console.log(`${ c.data.cards[0]['value'] } of ${ c.data.cards[0]['suit'] }`);
+      } else {
+        cardBtn.disabled = true;
+      }
     })
     .catch(err => console.log('ERROR!', err));
 }
