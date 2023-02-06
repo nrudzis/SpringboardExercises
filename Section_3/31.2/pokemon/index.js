@@ -1,12 +1,20 @@
 axios
   .get('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0')
   .then(pAll => {
-    const pokemon = [];
+    const pokemonAll = [];
     pAll.data.results.forEach(p => {
-      pokemon.push({ 'name': p.name, 'url': p.url });
+      pokemonAll.push({ 'name': p.name, 'url': p.url });
     })
-    console.log(pokemon[0])
-    console.log(pokemon[1])
-    console.log(pokemon[2])
+    const randThreePokemon = [];
+    while (randThreePokemon.length < 3) {
+      let randIndex = Math.floor(Math.random() * pokemonAll.length);
+      let randPokemon = pokemonAll[randIndex];
+      if (!randThreePokemon.includes(randPokemon)) {
+        randThreePokemon.push(randPokemon);
+      }
+    }
+    for (const pokemon of randThreePokemon) {
+      console.log(pokemon);
+    }
   })
   .catch(err => console.log('ERROR!', err));
