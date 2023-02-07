@@ -31,6 +31,15 @@ class Pokemon {
       })
   }
 
+  getImageURL(formsURL) {
+    return axios
+      .get(formsURL)
+      .then(f => {
+        return f.data.sprites.front_default;
+      })
+      .catch(err => console.log('ERROR!', err));
+  }
+
   getDescription(speciesURL) {
     return axios
       .get(speciesURL)
@@ -45,24 +54,38 @@ class Pokemon {
       .catch(err => console.log('ERROR!', err));
   }
 
-  getNameDescription() {
+  getNameImageDesc() {
+    const pObj = {};
     return this.getRandPokemon()
       .then(randPokemon => {
         const pName = randPokemon.name;
-        return this.getSpeciesURL(randPokemon)
-          .then(speciesURL => {
-            return this.getDescription(speciesURL)
-              .then(pDescription => {
-                return {'name': pName, 'description': pDescription};
-              });
-          });
+        return Promise.all([
+          this.getFormsURL(randPokemon)
+            .then(formsURL => {
+              return this.getImageURL(formsURL)
+                .then(imgURL => {
+                  pObj['image'] = imgURL;
+                });
+            }),
+          this.getSpeciesURL(randPokemon)
+            .then(speciesURL => {
+              return this.getDescription(speciesURL)
+                .then(pDescription => {
+                  pObj['name'] = pName
+                  pObj['description'] = pDescription
+                });
+            })
+        ])
+      })
+      .then(() => {
+        return pObj
       });
   }
 
   getThreeRandPokemon() {
     let threeRandPokemon = []
     for (let i=0; i<3; i++) {
-      this.getNameDescription().then(p => {
+      this.getNameImageDesc().then(p => {
         threeRandPokemon.push(p);
       });
     }
@@ -80,10 +103,13 @@ const displayPokemon = (ps) => {
   for (let p of ps) {
     const div = document.createElement('div');
     const h2 = document.createElement('h2');
+    const img = document.createElement('img');
     const par = document.createElement('p');
     h2.innerHTML = p.name;
+    img.src = p.image;
     par.innerHTML = p.description;
     div.appendChild(h2);
+    div.appendChild(img);
     div.appendChild(par);
     pokemonSection.appendChild(div);
   }
