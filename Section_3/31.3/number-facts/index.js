@@ -35,17 +35,9 @@ getNumsFacts().then(f => {
 
 //SINGLE NUMBER, FOUR FACTS
 const numFourFactsSection = document.querySelector('#num-four-facts-section');
-const fourNumFacts = [];
 
 for(let i=0; i<4; i++) {
-  fourNumFacts.push(
-    axios.get('http://numbersapi.com/15?json')
-  );
+  getNumFact(15).then(f => {
+    numFourFactsSection.insertAdjacentHTML('beforeend', `<p>${ f.text }</p>`);
+  });
 }
-
-Promise
-  .all(fourNumFacts)
-  .then(factsArr => (
-    factsArr.forEach(f => numFourFactsSection.insertAdjacentHTML('beforeend', `<p>${ f.data.text }</p>`))
-  ))
-  .catch(err => console.log('ERROR!', err));
