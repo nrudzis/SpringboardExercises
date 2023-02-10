@@ -1,85 +1,71 @@
 class Pokemon {
 
   constructor() {
-    this.threeRandPokemon = this.getThreeRandPokemon()
+    this.threeRandPokemon = this.getThreeRandPokemon();
   }
 
-  getRandPokemon() {
-    return axios
-      .get('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0')
-      .then(pAll => {
-        const randIndex = Math.floor(Math.random() * pAll.data.results.length);
-        return pAll.data.results[randIndex];
-      })
-      .catch(err => console.log('ERROR!', err));
+  async getRandPokemon() {
+    try {
+      const { data: pAll } = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0');
+      const randIndex = Math.floor(Math.random() * pAll.results.length);
+      return pAll.results[randIndex];
+      } catch (err) {
+        console.log('ERROR!', err);
+      }
   }
 
-  getSpeciesURL(pokemon) {
-    return axios
-      .get(pokemon.url)
-      .then(p => {
-        return p.data.species.url;
-      })
-      .catch(err => console.log('ERROR!', err));
+  async getSpeciesURL(pokemon) {
+    try {
+      const { data: p } = await axios.get(pokemon.url);
+      return p.species.url;
+      } catch (err) {
+        console.log('ERROR!', err);
+      }
   }
 
-  getFormsURL(pokemon) {
-    return axios
-      .get(pokemon.url)
-      .then(p => {
-        return p.data.forms[0]['url'];
-      })
+  async getFormsURL(pokemon) {
+    try {
+      const { data: p } = await axios.get(pokemon.url);
+      return p.forms[0]['url'];
+      } catch (err) {
+        console.log('ERROR!', err);
+      }
   }
 
-  getImageURL(formsURL) {
-    return axios
-      .get(formsURL)
-      .then(f => {
-        return f.data.sprites.front_default;
-      })
-      .catch(err => console.log('ERROR!', err));
+  async getImageURL(formsURL) {
+    try {
+      const { data: f } = await axios.get(formsURL);
+      return f.sprites.front_default;
+      } catch (err) {
+        console.log('ERROR!', err);
+      }
   }
 
-  getDescription(speciesURL) {
-    return axios
-      .get(speciesURL)
-      .then(s => {
-        if (s.data.flavor_text_entries.length > 0) {
-          const entry = s.data.flavor_text_entries.find(e => e.language.name === 'en');
-          return `${ entry.flavor_text }`;
-        } else {
-          return 'No description available.';
-        }
-      })
-      .catch(err => console.log('ERROR!', err));
+  async getDescription(speciesURL) {
+    try {
+      const { data: s } = await axios.get(speciesURL);
+      if (s.flavor_text_entries.length > 0) {
+        const entry = s.flavor_text_entries.find(e => e.language.name === 'en');
+        return `${ entry.flavor_text }`;
+      } else {
+        return 'No description available.';
+      }
+    } catch (err) {
+      console.log('ERROR!', err);
+    }
   }
 
-  getNameImageDesc() {
+  async getNameImageDesc() {
     const pObj = {};
-    return this.getRandPokemon()
-      .then(randPokemon => {
-        const pName = randPokemon.name;
-        return Promise.all([
-          this.getFormsURL(randPokemon)
-            .then(formsURL => {
-              return this.getImageURL(formsURL)
-                .then(imgURL => {
-                  pObj['image'] = imgURL;
-                });
-            }),
-          this.getSpeciesURL(randPokemon)
-            .then(speciesURL => {
-              return this.getDescription(speciesURL)
-                .then(pDescription => {
-                  pObj['name'] = pName
-                  pObj['description'] = pDescription
-                });
-            })
-        ]);
-      })
-      .then(() => {
-        return pObj
-      });
+    const randPokemon = await this.getRandPokemon();
+    const formsURL = await this.getFormsURL(randPokemon);
+    const imgURL = await this.getImageURL(formsURL);
+    const speciesURL = await this.getSpeciesURL(randPokemon);
+    const pDescription = await this.getDescription(speciesURL);
+    pObj['name'] = randPokemon.name;
+    pObj['image'] = imgURL;
+    pObj['description'] = pDescription;
+    return pObj
   }
 
   getThreeRandPokemon() {
