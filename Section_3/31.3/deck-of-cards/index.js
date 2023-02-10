@@ -2,23 +2,29 @@ const cardBtn = document.getElementById('draw-card-btn');
 const cardSection = document.getElementById('card-section');
 const cardImgs = [];
 
-axios
-  .get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
-  .then(d => {
-    axios
-      .get(`https://deckofcardsapi.com/api/deck/${ d.data.deck_id }/draw/?count=52`)
-      .then(c => {
-        for (let i=0; i<c.data.cards.length; i++) {
-          const cardSVG = c.data.cards[i]['images']['svg'];
-          const img = document.createElement('img');
-          img.src = cardSVG
-          img.classList.add('overlay');
-          cardImgs.push(img);
-        }
-      })
-      .catch(err => console.log('ERROR!', err));
-  })
-  .catch(err => console.log('ERROR!', err));
+const getCards = async function (cardsNum) {
+  try {
+    const { data: deck } = await axios.get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1');
+    const { data: c } = await axios.get(`https://deckofcardsapi.com/api/deck/${ deck.deck_id }/draw/?count=${ cardsNum }`);
+    return c.cards;
+  } catch (err) {
+    console.log('ERROR!', err);
+  }
+}
+
+const collectImages = (cards) => {
+  for (let i=0; i<cards.length; i++) {
+    const cardSVG = cards[i]['images']['svg'];
+    const img = document.createElement('img');
+    img.src = cardSVG
+    img.classList.add('overlay');
+    cardImgs.push(img);
+  }
+}
+
+getCards(52).then(cards => {
+  collectImages(cards);
+});
 
 const drawCard = () => {
   const cardImg = cardImgs[0];
