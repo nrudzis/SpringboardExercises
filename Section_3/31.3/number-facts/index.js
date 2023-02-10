@@ -17,15 +17,21 @@ getNumFact(42).then(f => {
 //MULTIPLE NUMBERS, ONE FACT EACH
 const numsFactsSection = document.querySelector('#nums-facts-section');
 
-axios
-  .get('http://numbersapi.com/7..9,24?json')
-  .then(f => {
-    const facts = Object.values(f.data);
-    for(let i=0; i<facts.length; i++) {
-      numsFactsSection.insertAdjacentHTML('beforeend', `<p>${ facts[i] }</p>`);
-    }
-  })
-  .catch(err => console.log('ERROR!', err));
+const getNumsFacts = async function () {
+  try {
+    const { data: facts } = await axios.get('http://numbersapi.com/7..9,24?json');
+    const factVals = Object.values(facts);
+    return factVals;
+  } catch (err) {
+    console.log('ERROR!', err);
+  }
+}
+
+getNumsFacts().then(f => {
+  for(let i=0; i<f.length; i++) {
+    numsFactsSection.insertAdjacentHTML('beforeend', `<p>${ f[i] }</p>`);
+  }
+});
 
 //SINGLE NUMBER, FOUR FACTS
 const numFourFactsSection = document.querySelector('#num-four-facts-section');
