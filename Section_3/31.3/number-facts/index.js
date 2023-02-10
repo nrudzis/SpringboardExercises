@@ -1,12 +1,20 @@
+//SINGLE NUMBER, SINGLE FACT
 const numFactSection = document.querySelector('#num-fact-section');
 
-axios
-  .get('http://numbersapi.com/42?json')
-  .then(f => {
-    numFactSection.insertAdjacentHTML('beforeend', `<p>${ f.data.text }</p>`);
-  })
-  .catch(err => console.log('ERROR!', err));
+const getNumFact = async function (num) {
+  try {
+    const { data: fact } = await axios.get(`http://numbersapi.com/${ num }?json`);
+    return fact;
+  } catch (err) {
+    console.log('ERROR!', err);
+  }
+}
 
+getNumFact(42).then(f => {
+  numFactSection.insertAdjacentHTML('beforeend', `<p>${ f.text }</p>`);
+});
+
+//MULTIPLE NUMBERS, ONE FACT EACH
 const numsFactsSection = document.querySelector('#nums-facts-section');
 
 axios
@@ -19,6 +27,7 @@ axios
   })
   .catch(err => console.log('ERROR!', err));
 
+//SINGLE NUMBER, FOUR FACTS
 const numFourFactsSection = document.querySelector('#num-four-facts-section');
 const fourNumFacts = [];
 
