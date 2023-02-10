@@ -1,6 +1,6 @@
 const fs = require('fs');
 const axios = require('axios');
-const path = process.argv[2];
+const arg = process.argv[2];
 
 const cat = (path) => {
   fs.readFile(path, 'utf8', (err, data) => {
@@ -12,14 +12,13 @@ const cat = (path) => {
   });
 }
 
-const webCat = async function (path) {
+const webCat = async function (url) {
   try {
-    const { data: content } = await axios.get(path);
+    const { data: content } = await axios.get(url);
     console.log(content);
   } catch (err) {
     console.log('ERROR: ', err);
   }
 }
 
-
-path.startsWith('http') ? webCat(path) : cat(path);
+arg.startsWith('http') ? webCat(arg) : cat(arg);
