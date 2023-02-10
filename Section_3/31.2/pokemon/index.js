@@ -27,7 +27,7 @@ class Pokemon {
     return axios
       .get(pokemon.url)
       .then(p => {
-        return p.data.forms[0]['url']
+        return p.data.forms[0]['url'];
       })
   }
 
@@ -75,7 +75,7 @@ class Pokemon {
                   pObj['description'] = pDescription
                 });
             })
-        ])
+        ]);
       })
       .then(() => {
         return pObj
@@ -113,11 +113,11 @@ const displayPokemon = (ps) => {
     div.appendChild(par);
     pokemonSection.appendChild(div);
   }
-  pokemon = new Pokemon();
 }
 
 
 pokemonBtn.addEventListener('click', e => {
   const threeRandPokemon = pokemon.threeRandPokemon;
   displayPokemon(threeRandPokemon);
+  pokemon = new Pokemon();
 });
