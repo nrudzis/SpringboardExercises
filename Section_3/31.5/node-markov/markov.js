@@ -6,7 +6,7 @@ class MarkovMachine {
   /** build markov machine; read in text.*/
 
   constructor(text) {
-    let words = text.split(/[ \r\n]+/);
+    let words = text.split(/[ \r\n]+/).map(word => (/[.,;!?:]$/.test(word) ? [word.slice(0, -1), word.slice(-1)] : word)).flat();
     this.words = words.filter(c => c !== "");
     this.makeChains();
   }
@@ -17,13 +17,45 @@ class MarkovMachine {
    *  {"the": ["cat", "hat"], "cat": ["in"], "in": ["the"], "hat": [null]} */
 
   makeChains() {
-    // TODO
+    const wordChains = {};
+    this.words.forEach((word, index) => {
+      if (!wordChains[word]) {
+        wordChains[word] = [];
+      }
+      let nextWord;
+      this.words[index + 1] === undefined ? nextWord = null : nextWord = this.words[index + 1];
+      if (!wordChains[word].includes(nextWord)) {
+        wordChains[word].push(nextWord);
+      }
+    });
+    return wordChains;
   }
 
 
   /** return random text from chains */
 
   makeText(numWords = 100) {
-    // TODO
+    const chains = this.makeChains();
+    const chainsKeys = Object.keys(chains);
+    const textArr = [];
+    let textWord;
+    do {
+      textWord = chainsKeys[Math.floor(Math.random() * chainsKeys.length)];
+    } while (JSON.stringify(chains[textWord]) === JSON.stringify([null]));
+    textArr.push(textWord);
+    let nextTextWord;
+    while (textArr.length < numWords) {
+      do {
+        nextTextWord = chains[textWord][Math.floor(Math.random() * chains[textWord].length)];
+      } while (nextTextWord === null || textArr.length !== numWords - 1 && JSON.stringify(chains[nextTextWord]) === JSON.stringify([null]));
+      textArr.push(nextTextWord);
+      textWord = nextTextWord;
+    }
+    const randomText = textArr.map((el, index) => (index + 1 === textArr.length || /[a-z]/i.test(el) && /[.,;!?:]$/.test(textArr[index + 1]) ? el : el + ' ')).join('');
+    return randomText;
   }
 }
+
+module.exports = {
+  MarkovMachine: MarkovMachine
+};
