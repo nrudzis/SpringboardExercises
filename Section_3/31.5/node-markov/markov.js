@@ -6,8 +6,8 @@ class MarkovMachine {
   /** build markov machine; read in text.*/
 
   constructor(text) {
-    let words = text.split(/[ \r\n]+/).map(word => (/[.,;!?:]$/.test(word) ? [word.slice(0, -1), word.slice(-1)] : word)).flat();
-    this.words = words.filter(c => c !== "");
+    let words = text.split(/(?:[ \r\n]+|\b)(?=\.{3}|\b)/);
+    this.words = words;
     this.makeChains();
   }
 
@@ -51,7 +51,7 @@ class MarkovMachine {
       textArr.push(nextTextWord);
       textWord = nextTextWord;
     }
-    const randomText = textArr.map((el, index) => (index + 1 === textArr.length || /[a-z]/i.test(el) && /[.,;!?:]$/.test(textArr[index + 1]) ? el : el + ' ')).join('');
+    const randomText = textArr.map((el, index) => (index + 1 === textArr.length || /[a-z]/i.test(el) && /[.,;!?:-]$/.test(textArr[index + 1]) || /[-]$/.test(el) && /[a-z]/i.test(textArr[index + 1])) ? el : el + ' ').join('');
     return randomText;
   }
 }
