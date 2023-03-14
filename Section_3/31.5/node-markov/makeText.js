@@ -15,7 +15,7 @@ const logText = (data) => {
 const cat = (path) => {
   fs.readFile(path, 'utf8', (err, data) => {
     if (err) {
-      console.error(`ERROR! Unable to read file ${source}: `, err);
+      console.error(`ERROR: Unable to read file ${source}.`, err);
       process.exit(1);
     }
     logText(data);
@@ -27,7 +27,7 @@ const webCat = async function (url) {
     const { data: content } = await axios.get(url);
     logText(content);
   } catch (err) {
-    console.error(`ERROR! Unable to read URL ${source}: `, err);
+    console.error(`ERROR: Unable to read URL ${source}.`, err);
   }
 }
 
@@ -36,5 +36,5 @@ if (sourceType === 'file') {
 } else if (sourceType === 'url') {
   webCat(source);
 } else {
-  console.error(`ERROR! Unknown type '${sourceType}'. Use 'file' or 'url'.`);
+  console.error(`ERROR: Unknown type '${sourceType}'. Use 'file' or 'url'.`);
 }
