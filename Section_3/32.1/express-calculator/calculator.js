@@ -2,10 +2,13 @@ const express = require('express');
 
 const app = express();
 
-const operations = {
-  mean: function(nums) {
-    const numsArr = nums.split(',').map(numStr => parseFloat(numStr));
-    return numsArr.reduce((total, current) => total + current) / numsArr.length;
+app.use(express.json());
+
+const OPERATIONS = {
+  meanCalc: function(nums) {
+    const numsArr = nums.split(',').map(num => parseFloat(num));
+    const mean = numsArr.reduce((total, current) => total + current) / numsArr.length;
+    return mean;
   },
   median: 'MEDIAN',
   mode: 'MODE'
@@ -14,8 +17,8 @@ const operations = {
 app.get('/:operation', (req, res) => {
   const operation = req.params.operation;
   const { nums } = req.query;
-  const result = operations[operation](nums)
-  return res.send(result.toString());
+  const result = OPERATIONS[`${operation}Calc`](nums);
+  return res.json({ 'operation': operation, 'value': result });
 });
 
 app.listen(3000, () => {
