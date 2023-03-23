@@ -21,8 +21,13 @@ router.patch('/:name', (req, res) => {
   const item = ITEMS.find(i => i.name === req.params.name);
   item.name = req.body.name;
   item.price = req.body.price;
-  const itemUpdated = ITEMS.find(i => i.name === req.body.name)
-  return res.json({ 'updated': itemUpdated });
+  return res.json({ 'updated': item });
+});
+
+router.delete('/:name', (req, res) => {
+  const itemIndex = ITEMS.findIndex(i => i.name === req.params.name);
+  ITEMS.splice(itemIndex, 1);
+  return res.json('Deleted');
 });
 
 module.exports = router;
