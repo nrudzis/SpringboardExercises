@@ -28,7 +28,7 @@ router.patch('/:name', (req, res) => {
 router.delete('/:name', (req, res) => {
   const itemIndex = ITEMS.findIndex(i => i.name === req.params.name);
   ITEMS.splice(itemIndex, 1);
-  return res.json('Deleted');
+  return res.json({ 'message': 'Deleted' });
 });
 
 module.exports = router;
