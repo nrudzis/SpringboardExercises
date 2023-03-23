@@ -1,11 +1,24 @@
 const express = require('express');
 const itemRoutes = require('./itemRoutes');
+const ExpressError = require('./expressError');
 
 const app = express();
 
 app.use(express.json());
 app.use('/items', itemRoutes);
 
+app.use((req, res, next) => {
+  const notFoundError = new ExpressError('Not Found', 404)
+  return next(notFoundError);
+});
+
+app.use(() => {
+  let status = err.status || 500;
+  let msg = err.msg;
+  return res.status(status).json({
+    error: { msg, status }
+  });
+});
 
 app.listen(3000, () => {
   console.log('Listening on port 3000.');
