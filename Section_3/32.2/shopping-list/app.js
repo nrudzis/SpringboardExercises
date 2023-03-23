@@ -12,7 +12,7 @@ app.use((req, res, next) => {
   return next(notFoundError);
 });
 
-app.use(() => {
+app.use((err, req, res, next) => {
   let status = err.status || 500;
   let msg = err.msg;
   return res.status(status).json({
