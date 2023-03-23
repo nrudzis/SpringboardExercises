@@ -16,7 +16,7 @@ router.post('/', middleware.validateJSON, (req, res, next) => {
   try {
     ITEMS.push({ 'name': req.body.name, 'price': req.body.price });
     const item = ITEMS.find(i => i.name === req.body.name);
-    return res.json({ 'added': item });
+    return res.status(201).json({ 'added': item });
   } catch (err) {
     return next(err);
   }
