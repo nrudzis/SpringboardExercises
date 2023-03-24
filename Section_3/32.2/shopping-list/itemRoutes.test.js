@@ -50,67 +50,24 @@ describe('PATCH /items/:name', () => {
       updated: { name: 'white_chocolate', price: 9.89 }
     });
   });
+  test('should respond with 404 for invalid name', async () => {
+    const res = await req(app)
+      .patch('/items/wrong_name')
+      .send({
+        name: 'white_chocolate',
+        price: 9.89
+      });
+    expect(res.statusCode).toBe(404);
+    expect(res.body).toEqual({
+      error: { msg: 'Unable to find item to update', status: 404 }
+    });
+  })
 });
 
-
-
-
-
-//const express = require('express');
-//const ExpressError = require('./expressError');
-//const router = new express.Router();
-//const middleware = require('./middleware');
-//const ITEMS = require('./fakeDb');
-//
-//router.get('/', (req, res, next) => {
-//  try {
-//    return res.json({ 'items': ITEMS });
-//  } catch (err) {
-//    return next(err);
-//  }
-//});
-//
-//router.post('/', middleware.validateJSON, (req, res, next) => {
-//  try {
-//    ITEMS.push({ 'name': req.body.name, 'price': req.body.price });
-//    const item = ITEMS.find(i => i.name === req.body.name);
-//    return res.json({ 'added': item });
-//  } catch (err) {
-//    return next(err);
-//  }
-//});
-//
-//router.get('/:name', (req, res) => {
-//  try {
-//    const item = ITEMS.find(i => i.name === req.params.name);
-//    if (!item) throw new ExpressError('Unable to find item', 404);
-//    return res.json({ item });
-//  } catch (err) {
-//    return next(err);
-//  }
-//});
-//
-//router.patch('/:name', middleware.validateJSON, (req, res) => {
-//  try {
-//    const item = ITEMS.find(i => i.name === req.params.name);
-//    if (!item) throw new ExpressError('Unable to find item to update', 404);
-//    item.name = req.body.name;
-//    item.price = req.body.price;
-//    return res.json({ 'updated': item });
-//  } catch (err) {
-//    return next(err);
-//  }
-//});
-//
-//router.delete('/:name', (req, res) => {
-//  try {
-//    const itemIndex = ITEMS.findIndex(i => i.name === req.params.name);
-//    if (!ITEMS[itemIndex]) throw new ExpressError('Unable to find item to delete', 404);
-//    ITEMS.splice(itemIndex, 1);
-//    return res.json({ 'message': 'Deleted' });
-//  } catch (err) {
-//    return next(err);
-//  }
-//});
-//
-//module.exports = router;
+describe('DELETE /items/:name', () => {
+  test('should delete an item in the list', async () => {
+    const res = await req(app).delete(`/items/${chocolate.name}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual({ message: 'Deleted' });
+  });
+});
