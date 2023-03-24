@@ -35,7 +35,7 @@ describe('POST /items', () => {
       added: { name: 'flour', price: 10.37 }
     });
   });
-  test('should respond with 400 and expected message for invalid keys in JSON', async () => {
+  test('should respond with 400 and expected message for missing keys in JSON', async () => {
     const res = await req(app)
       .post('/items')
       .send({
@@ -113,7 +113,7 @@ describe('PATCH /items/:name', () => {
       error: { msg: 'Unable to find item to update', status: 404 }
     });
   });
-  test('should respond with 400 and expected message for invalid keys in JSON', async () => {
+  test('should respond with 400 and expected message for missing keys in JSON', async () => {
     const res = await req(app)
       .patch(`/items/${chocolate.name}`)
       .send({
