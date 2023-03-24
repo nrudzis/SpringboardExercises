@@ -35,6 +35,42 @@ describe('POST /items', () => {
       added: { name: 'flour', price: 10.37 }
     });
   });
+  test('should respond with 400 and expected message for invalid keys in JSON', async () => {
+    const res = await req(app)
+      .post('/items')
+      .send({
+        nname: 'flour',
+        price: 10.37
+      });
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual({
+      error: { msg: "Expected key(s) missing: must include 'name' and 'price'.", status: 400 }
+    });
+  });
+  test('should respond with 400 and expected message for invalid types in JSON', async () => {
+    const res = await req(app)
+      .post('/items')
+      .send({
+        name: 10.37,
+        price: 'flour'
+      });
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual({
+      error: { msg: "Key(s) mapped to invalid type(s): 'name' must be a string and 'price' must be a number.", status: 400 }
+    });
+  });
+  test('should respond with 400 and expected message for invalid names in JSON', async () => {
+    const res = await req(app)
+      .post('/items')
+      .send({
+        name: 'rye flour',
+        price: 10.37
+      });
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual({
+      error: { msg: "Constraint violation: 'name' must not include spaces.", status: 400 }
+    });
+  });
 });
 
 describe('GET /items/:name', () => {
@@ -76,7 +112,43 @@ describe('PATCH /items/:name', () => {
     expect(res.body).toEqual({
       error: { msg: 'Unable to find item to update', status: 404 }
     });
-  })
+  });
+  test('should respond with 400 and expected message for invalid keys in JSON', async () => {
+    const res = await req(app)
+      .patch(`/items/${chocolate.name}`)
+      .send({
+        nname: 'white_chocolate',
+        price: 9.89
+      });
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual({
+      error: { msg: "Expected key(s) missing: must include 'name' and 'price'.", status: 400 }
+    });
+  });
+  test('should respond with 400 and expected message for invalid types in JSON', async () => {
+    const res = await req(app)
+      .patch(`/items/${chocolate.name}`)
+      .send({
+        name: 9.89,
+        price: 'white_chocolate'
+      });
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual({
+      error: { msg: "Key(s) mapped to invalid type(s): 'name' must be a string and 'price' must be a number.", status: 400 }
+    });
+  });
+  test('should respond with 400 and expected message for invalid names in JSON', async () => {
+    const res = await req(app)
+      .patch(`/items/${chocolate.name}`)
+      .send({
+        name: 'white chocolate',
+        price: 9.89
+      });
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual({
+      error: { msg: "Constraint violation: 'name' must not include spaces.", status: 400 }
+    });
+  });
 });
 
 describe('DELETE /items/:name', () => {
