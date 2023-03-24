@@ -37,6 +37,21 @@ describe('POST /items', () => {
   });
 });
 
+describe('PATCH /items/:name', () => {
+  test('should update an item in the list', async () => {
+    const res = await req(app)
+      .patch(`/items/${chocolate.name}`)
+      .send({
+        name: 'white_chocolate',
+        price: 9.89
+      });
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toEqual({
+      updated: { name: 'white_chocolate', price: 9.89 }
+    });
+  });
+});
+
 
 
 

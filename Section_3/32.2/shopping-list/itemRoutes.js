@@ -22,7 +22,7 @@ router.post('/', middleware.validateJSON, (req, res, next) => {
   }
 });
 
-router.get('/:name', (req, res) => {
+router.get('/:name', (req, res, next) => {
   try {
     const item = ITEMS.find(i => i.name === req.params.name);
     if (!item) throw new ExpressError('Unable to find item', 404);
@@ -32,7 +32,7 @@ router.get('/:name', (req, res) => {
   }
 });
 
-router.patch('/:name', middleware.validateJSON, (req, res) => {
+router.patch('/:name', middleware.validateJSON, (req, res, next) => {
   try {
     const item = ITEMS.find(i => i.name === req.params.name);
     if (!item) throw new ExpressError('Unable to find item to update', 404);
@@ -44,7 +44,7 @@ router.patch('/:name', middleware.validateJSON, (req, res) => {
   }
 });
 
-router.delete('/:name', (req, res) => {
+router.delete('/:name', (req, res, next) => {
   try {
     const itemIndex = ITEMS.findIndex(i => i.name === req.params.name);
     if (!ITEMS[itemIndex]) throw new ExpressError('Unable to find item to delete', 404);
