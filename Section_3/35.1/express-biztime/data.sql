@@ -1,3 +1,6 @@
+DROP DATABASE IF EXISTS biztime;
+CREATE DATABASE biztime;
+
 \c biztime
 
 DROP TABLE IF EXISTS invoices;
@@ -23,7 +26,7 @@ INSERT INTO companies
   VALUES ('apple', 'Apple Computer', 'Maker of OSX.'),
          ('ibm', 'IBM', 'Big blue.');
 
-INSERT INTO invoices (comp_Code, amt, paid, paid_date)
+INSERT INTO invoices (comp_code, amt, paid, paid_date)
   VALUES ('apple', 100, false, null),
          ('apple', 200, false, null),
          ('apple', 300, true, '2018-01-01'),
