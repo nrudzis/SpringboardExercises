@@ -77,14 +77,13 @@ describe('GET /companies/:code', () => {
 describe('POST /companies', () => {
   test('Adds a new company', async () => {
     const response = await request(app).post('/companies').send({
-      code: 'nvidia',
       name: 'Nvidia',
       description: 'GPU maker'
     });
     expect(response.statusCode).toBe(201);
     expect(response.body).toEqual({
       company: {
-        code: 'nvidia',
+        code: 'Nvidia',
         name: 'Nvidia',
         description: 'GPU maker'
       }
