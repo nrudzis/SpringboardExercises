@@ -73,3 +73,55 @@ describe('GET /companies/:code', () => {
     expect(response.statusCode).toBe(404);
   });
 });
+
+describe('POST /companies', () => {
+  test('Adds a new company', async () => {
+    const response = await request(app).post('/companies').send({
+      code: 'nvidia',
+      name: 'Nvidia',
+      description: 'GPU maker'
+    });
+    expect(response.statusCode).toBe(201);
+    expect(response.body).toEqual({
+      company: {
+        code: 'nvidia',
+        name: 'Nvidia',
+        description: 'GPU maker'
+      }
+    });
+  });
+});
+
+describe('PUT /companies/:code', () => {
+  test('Edits an existing company', async () => {
+    const testCompany = testCompanies[0];
+    const response = await request(app).put(`/companies/${ testCompany.code }`).send({
+      name: 'Test Name',
+      description: 'Test Description'
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({
+      company: {
+        code: testCompany.code,
+        name: 'Test Name',
+        description: 'Test Description'
+      }
+    });
+  });
+  test('Responds with 404 for invalid code', async () => {
+    const response = await request(app).put('/companies/fakeCode').send({
+      name: 'Test Name',
+      description: 'Test Description'
+    });
+    expect(response.statusCode).toBe(404);
+  });
+});
+
+describe('DELETE /companies/:code', () => {
+  test('Deletes a single company', async () => {
+    const testCompany = testCompanies[0];
+    const response = await request(app).delete(`/companies/${ testCompany.code }`);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({ status: 'deleted' });
+  });
+});
