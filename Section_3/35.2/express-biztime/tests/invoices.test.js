@@ -59,7 +59,7 @@ describe('GET /invoices', () => {
 });
 
 describe('GET /invoices/:id', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
     testInvoices.forEach(i => {
       const { code, name, description } = testCompanies.find(c => c.code === i.comp_code);
       i.company = { code, name, description };
