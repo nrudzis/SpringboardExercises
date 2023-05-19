@@ -99,10 +99,47 @@ describe('POST /invoices', () => {
 });
 
 describe('PUT /invoices/:id', () => {
-  test('Edit an existing invoice', async () => {
+  test('Edit an existing invoice amount, unpaying case', async () => {
     const testInvoice = testInvoices[0];
     const response = await request(app).put(`/invoices/${ testInvoice.id }`).send({
-      amt: 1234
+      amt: 1234,
+      paid: false
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({
+      invoice: {
+        id: testInvoice.id,
+        comp_code: testInvoice.comp_code,
+        amt: 1234,
+        paid: testInvoice.paid,
+        add_date: testInvoice.add_date,
+        paid_date: null
+      }
+    });
+  });
+  test('Edit an existing invoice amount, paying case', async () => {
+    const testInvoice = testInvoices[0];
+    const response = await request(app).put(`/invoices/${ testInvoice.id }`).send({
+      amt: 1234,
+      paid: true
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({
+      invoice: {
+        id: testInvoice.id,
+        comp_code: testInvoice.comp_code,
+        amt: 1234,
+        paid: true,
+        add_date: testInvoice.add_date,
+        paid_date: expect.any(String)
+      }
+    });
+  });
+  test('Edit an existing invoice amount, already paid case', async () => {
+    const testInvoice = testInvoices[2];
+    const response = await request(app).put(`/invoices/${ testInvoice.id }`).send({
+      amt: 1234,
+      paid: null
     });
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({
@@ -118,7 +155,8 @@ describe('PUT /invoices/:id', () => {
   });
   test('Responds with 404 for invalid id', async () => {
     const response = await request(app).put('/invoices/0').send({
-      amt: 1234
+      amt: 1234,
+      paid: false
     });
     expect(response.statusCode).toBe(404);
   });
