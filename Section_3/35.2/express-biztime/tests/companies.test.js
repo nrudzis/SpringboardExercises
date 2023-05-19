@@ -38,11 +38,6 @@ const initializeInvoicesDb = async () => {
 
 beforeEach(async () => {
   await initializeCompaniesDb();
-  //testCompanies.forEach(c => c.invoices = testInvoices.filter(i => i.comp_code === c.code).map(i => i.id));
-  //testInvoices.forEach(i => {
-  //  const { code, name, description } = testCompanies.find(c => c.code === i.comp_code);
-  //  i.company = { code, name, description };
-  //});
 });
 
 afterEach(async () => {
