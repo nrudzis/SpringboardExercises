@@ -77,3 +77,58 @@ describe('GET /invoices/:id', () => {
     expect(response.statusCode).toBe(404);
   });
 });
+
+describe('POST /invoices', () => {
+  test('Add a new invoice', async () => {
+    const response = await request(app).post('/invoices').send({
+      comp_code: 'ibm',
+      amt: 100
+    });
+    expect(response.statusCode).toBe(201);
+    expect(response.body).toEqual({
+      invoice: {
+        id: expect.any(Number),
+        comp_code: 'ibm',
+        amt: 100,
+        paid: false,
+        add_date: expect.any(String),
+        paid_date: null
+      }
+    });
+  });
+});
+
+describe('PUT /invoices/:id', () => {
+  test('Edit an existing invoice', async () => {
+    const testInvoice = testInvoices[0];
+    const response = await request(app).put(`/invoices/${ testInvoice.id }`).send({
+      amt: 1234
+    });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({
+      invoice: {
+        id: testInvoice.id,
+        comp_code: testInvoice.comp_code,
+        amt: 1234,
+        paid: testInvoice.paid,
+        add_date: testInvoice.add_date,
+        paid_date: testInvoice.paid_date
+      }
+    });
+  });
+  test('Responds with 404 for invalid id', async () => {
+    const response = await request(app).put('/invoices/0').send({
+      amt: 1234
+    });
+    expect(response.statusCode).toBe(404);
+  });
+});
+
+describe('DELETE /invoices/:id', () => {
+  test('Deletes a single invoice', async () => {
+    const testInvoice = testInvoices[0];
+    const response = await request(app).delete(`/invoices/${ testInvoice.id }`);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({ status: 'deleted' });
+  });
+});
