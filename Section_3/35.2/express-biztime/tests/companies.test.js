@@ -20,10 +20,17 @@ beforeEach(async () => {
            ('apple', 200, false, null),
            ('apple', 300, true, '2018-01-01'),
            ('ibm', 400, false, null)
-    RETURNING id, comp_code, amt, paid, paid_date`
+    RETURNING id, comp_code, amt, paid, add_date, paid_date`
   );
   testCompanies = cResult.rows;
   testInvoices = iResult.rows;
+  testInvoices.forEach(invoice => {
+    Object.entries(invoice).forEach(([k, v]) => {
+      if (!!v && k === 'paid_date' || k === 'add_date') {
+        invoice[k] = v.toISOString();
+      }
+    });
+  });
   //testCompanies.forEach(c => c.invoices = testInvoices.filter(i => i.comp_code === c.code).map(i => i.id));
   //testInvoices.forEach(i => {
   //  const { code, name, description } = testCompanies.find(c => c.code === i.comp_code);
