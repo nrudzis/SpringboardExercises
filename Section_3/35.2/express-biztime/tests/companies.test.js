@@ -7,14 +7,18 @@ const db = require('../db');
 let testCompanies;
 let testInvoices;
 
-beforeEach(async () => {
-  const cResult = await db.query(
+const initializeCompaniesDb = async () => {
+  const companies = await db.query(
     `INSERT INTO companies
     VALUES ('apple', 'Apple Computer', 'Maker of OSX'),
            ('ibm', 'IBM', 'Big blue')
     RETURNING code, name, description`
   );
-  const iResult = await db.query(
+  testCompanies = companies.rows;
+}
+
+const initializeInvoicesDb = async () => {
+  const invoices = await db.query(
     `INSERT INTO invoices (comp_code, amt, paid, paid_date)
     VALUES ('apple', 100, false, null),
            ('apple', 200, false, null),
@@ -22,8 +26,7 @@ beforeEach(async () => {
            ('ibm', 400, false, null)
     RETURNING id, comp_code, amt, paid, add_date, paid_date`
   );
-  testCompanies = cResult.rows;
-  testInvoices = iResult.rows;
+  testInvoices = invoices.rows;
   testInvoices.forEach(invoice => {
     Object.entries(invoice).forEach(([k, v]) => {
       if (!!v && k === 'paid_date' || k === 'add_date') {
@@ -31,6 +34,10 @@ beforeEach(async () => {
       }
     });
   });
+}
+
+beforeEach(async () => {
+  await initializeCompaniesDb();
   //testCompanies.forEach(c => c.invoices = testInvoices.filter(i => i.comp_code === c.code).map(i => i.id));
   //testInvoices.forEach(i => {
   //  const { code, name, description } = testCompanies.find(c => c.code === i.comp_code);
@@ -52,5 +59,22 @@ describe('GET /companies', () => {
     const response = await request(app).get('/companies');
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({ companies: testCompanies });
+  });
+});
+
+describe('GET /companies/:code', () => {
+  beforeEach(async () => {
+    await initializeInvoicesDb();
+    testCompanies.forEach(c => c.invoices = testInvoices.filter(i => i.comp_code === c.code).map(i => i.id));
+  });
+  test('Gets a single company', async () => {
+    testCompany = testCompanies[0];
+    const response = await request(app).get(`/companies/${ testCompany.code }`);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({ company: testCompany });
+  });
+  test('Responds with 404 for invalid code', async () => {
+    const response = await request(app).get('/companies/fakeCode');
+    expect(response.statusCode).toBe(404);
   });
 });

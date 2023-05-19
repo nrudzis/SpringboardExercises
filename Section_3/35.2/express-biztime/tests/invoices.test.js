@@ -7,14 +7,18 @@ const db = require('../db');
 let testCompanies;
 let testInvoices;
 
-beforeEach(async () => {
-  const cResult = await db.query(
+const initializeCompaniesDb = async () => {
+  const companies = await db.query(
     `INSERT INTO companies
     VALUES ('apple', 'Apple Computer', 'Maker of OSX'),
            ('ibm', 'IBM', 'Big blue')
     RETURNING code, name, description`
   );
-  const iResult = await db.query(
+  testCompanies = companies.rows;
+}
+
+const initializeInvoicesDb = async () => {
+  const invoices = await db.query(
     `INSERT INTO invoices (comp_code, amt, paid, paid_date)
     VALUES ('apple', 100, false, null),
            ('apple', 200, false, null),
@@ -22,8 +26,7 @@ beforeEach(async () => {
            ('ibm', 400, false, null)
     RETURNING id, comp_code, amt, paid, add_date, paid_date`
   );
-  testCompanies = cResult.rows;
-  testInvoices = iResult.rows;
+  testInvoices = invoices.rows;
   testInvoices.forEach(invoice => {
     Object.entries(invoice).forEach(([k, v]) => {
       if (!!v && k === 'paid_date' || k === 'add_date') {
@@ -31,11 +34,11 @@ beforeEach(async () => {
       }
     });
   });
-  //testCompanies.forEach(c => c.invoices = testInvoices.filter(i => i.comp_code === c.code).map(i => i.id));
-  //testInvoices.forEach(i => {
-  //  const { code, name, description } = testCompanies.find(c => c.code === i.comp_code);
-  //  i.company = { code, name, description };
-  //});
+}
+
+beforeEach(async () => {
+  await initializeCompaniesDb();
+  await initializeInvoicesDb();
 });
 
 afterEach(async () => {
@@ -52,5 +55,25 @@ describe('GET /invoices', () => {
     const response = await request(app).get('/invoices');
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({ invoices: testInvoices });
+  });
+});
+
+describe('GET /invoices/:id', () => {
+  beforeEach(async () => {
+    testInvoices.forEach(i => {
+      const { code, name, description } = testCompanies.find(c => c.code === i.comp_code);
+      i.company = { code, name, description };
+      delete i.comp_code;
+    });
+  });
+  test('Gets a single invoice', async () => {
+    testInvoice = testInvoices[0];
+    const response = await request(app).get(`/invoices/${ testInvoice.id }`);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({ invoice: testInvoice });
+  });
+  test('Responds with 404 for invalid id', async () => {
+    const response = await request(app).get('/invoices/0');
+    expect(response.statusCode).toBe(404);
   });
 });
