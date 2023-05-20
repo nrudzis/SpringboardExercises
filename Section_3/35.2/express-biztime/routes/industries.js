@@ -46,4 +46,17 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+/** Associate industry to company */
+
+router.post('/:indCode', async (req, res, next) => {
+  try {
+    const { indCode } = req.params;
+    const { comp_code } = req.body;
+    const result = await db.query(`INSERT INTO industries_companies (ind_code, comp_code) VALUES ($1, $2) RETURNING ind_code, comp_code`, [indCode, comp_code]);
+    return res.status(201).json({ industry_company: result.rows[0] })
+  } catch (err) {
+    return next(err);
+  }
+});
+
 module.exports = router;
