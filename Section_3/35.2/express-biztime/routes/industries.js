@@ -15,7 +15,7 @@ router.get('/', async (req, res, next) => {
     const result = await db.query(
       `SELECT i.code, i.industry, ic.comp_code
       FROM industries AS i
-      INNER JOIN industries_companies AS ic
+      LEFT JOIN industries_companies AS ic
       ON (i.code = ic.ind_code)`
     );
     const industries = result.rows.reduce((acc, { code, industry, comp_code }) => {
@@ -28,6 +28,19 @@ router.get('/', async (req, res, next) => {
       return acc;
     }, []);
     return res.json({ industries: industries });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+/** Add industry */
+
+router.post('/', async (req, res, next) => {
+  try {
+    const { industry } = req.body;
+    const code = slugify(industry);
+    const result = await db.query(`INSERT INTO industries (code, industry) VALUES ($1, $2) RETURNING code, industry`, [code, industry]);
+    return res.status(201).json({ industry: result.rows[0] })
   } catch (err) {
     return next(err);
   }
