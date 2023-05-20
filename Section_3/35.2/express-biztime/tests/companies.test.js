@@ -83,8 +83,6 @@ describe('GET /companies', () => {
   test('Gets a list of two companies', async () => {
     const response = await request(app).get('/companies');
     expect(response.statusCode).toBe(200);
-    console.log(testCompanies);
-    console.log(response.body);
     expect(response.body).toEqual({ companies: testCompanies });
   });
 });
@@ -95,11 +93,8 @@ describe('GET /companies/:code', () => {
     await initializeIndustriesCompaniesDb();
     await initializeInvoicesDb();
     testIndsComps.forEach(ic => [ ic.industry ] = testIndustries.filter(i => i.code === ic.ind_code).map(i => i.industry));
-    console.log(testIndsComps);
     testCompanies.forEach(c => c.industries = testIndsComps.filter(ic => ic.comp_code === c.code).map(ic => ic.industry));
-    console.log(testCompanies);
     testCompanies.forEach(c => c.invoices = testInvoices.filter(i => i.comp_code === c.code).map(i => i.id));
-    console.log(testCompanies);
   });
   test('Gets a single company', async () => {
     testCompany = testCompanies[0];
