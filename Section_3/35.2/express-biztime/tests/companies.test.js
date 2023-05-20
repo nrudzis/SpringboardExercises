@@ -5,6 +5,8 @@ const app = require('../app');
 const db = require('../db');
 
 let testCompanies;
+let testIndustries;
+let testIndsComps;
 let testInvoices;
 
 const initializeCompaniesDb = async () => {
@@ -15,6 +17,32 @@ const initializeCompaniesDb = async () => {
     RETURNING code, name, description`
   );
   testCompanies = companies.rows;
+}
+
+const initializeIndustriesDb = async () => {
+  const industries = await db.query(
+    `INSERT INTO industries
+    VALUES ('technology', 'Technology'),
+            ('electronics', 'Electronics'),
+            ('consumer-electronics', 'Consumer Electronics'),
+            ('mainframe-computing', 'Mainframe Computing')
+    RETURNING code, industry`
+  );
+  testIndustries = industries.rows;
+}
+
+const initializeIndustriesCompaniesDb = async () => {
+  const industriesCompanies = await db.query(
+    `INSERT INTO industries_companies
+    VALUES ('technology', 'apple'),
+           ('technology', 'ibm'),
+           ('electronics', 'apple'),
+           ('electronics', 'ibm'),
+           ('consumer-electronics', 'apple'),
+           ('mainframe-computing', 'ibm')
+    RETURNING ind_code, comp_code`
+  );
+  testIndsComps = industriesCompanies.rows;
 }
 
 const initializeInvoicesDb = async () => {
@@ -42,6 +70,8 @@ beforeEach(async () => {
 
 afterEach(async () => {
   await db.query('DELETE FROM companies');
+  await db.query('DELETE FROM industries');
+  await db.query('DELETE FROM industries_companies');
   await db.query('DELETE FROM invoices');
 });
 
@@ -53,14 +83,23 @@ describe('GET /companies', () => {
   test('Gets a list of two companies', async () => {
     const response = await request(app).get('/companies');
     expect(response.statusCode).toBe(200);
+    console.log(testCompanies);
+    console.log(response.body);
     expect(response.body).toEqual({ companies: testCompanies });
   });
 });
 
 describe('GET /companies/:code', () => {
   beforeEach(async () => {
+    await initializeIndustriesDb();
+    await initializeIndustriesCompaniesDb();
     await initializeInvoicesDb();
+    testIndsComps.forEach(ic => [ ic.industry ] = testIndustries.filter(i => i.code === ic.ind_code).map(i => i.industry));
+    console.log(testIndsComps);
+    testCompanies.forEach(c => c.industries = testIndsComps.filter(ic => ic.comp_code === c.code).map(ic => ic.industry));
+    console.log(testCompanies);
     testCompanies.forEach(c => c.invoices = testInvoices.filter(i => i.comp_code === c.code).map(i => i.id));
+    console.log(testCompanies);
   });
   test('Gets a single company', async () => {
     testCompany = testCompanies[0];

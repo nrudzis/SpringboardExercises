@@ -3,8 +3,10 @@ CREATE DATABASE biztime;
 
 \c biztime
 
-DROP TABLE IF EXISTS invoices;
 DROP TABLE IF EXISTS companies;
+DROP TABLE IF EXISTS industries;
+DROP TABLE IF EXISTS industries_companies;
+DROP TABLE IF EXISTS invoices;
 
 CREATE TABLE companies (
     code text PRIMARY KEY,
@@ -28,8 +30,8 @@ CREATE TABLE industries (
 );
 
 CREATE TABLE industries_companies (
-    ind_code text NOT NULL REFERENCES industries,
-    comp_code text NOT NULL REFERENCES companies,
+    ind_code text NOT NULL REFERENCES industries ON DELETE CASCADE,
+    comp_code text NOT NULL REFERENCES companies ON DELETE CASCADE,
     PRIMARY KEY(ind_code, comp_code)
 );
 
