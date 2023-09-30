@@ -1,16 +1,12 @@
 import defaultPokemon from './defaultPokemon';
+import Pokecard from './Pokecard';
 
 const Pokedex = ({pokemon = defaultPokemon}) => {
   return (
     <div>
       <h1>Pokedex</h1>
       {pokemon.map(p => (
-        <div>
-          <h4>{p.name}</h4>
-          <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.id}.png`} alt='Pokemon character'/>
-          <p>Type: {p.type}</p>
-          <p>EXP: {p.base_experience}</p>
-        </div>
+        <Pokecard id={p.id} name={p.name} type={p.type} base_experience={p.base_experience} />
       ))}
     </div>
   );
