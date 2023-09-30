@@ -1,14 +1,17 @@
 import defaultPokemon from './defaultPokemon';
 import Pokecard from './Pokecard';
+import './Pokedex.css';
 
 const Pokedex = ({pokemon = defaultPokemon}) => {
   return (
-    <div>
-      <h1>Pokedex</h1>
-      {pokemon.map(p => (
-        <Pokecard id={p.id} name={p.name} type={p.type} base_experience={p.base_experience} />
-      ))}
-    </div>
+    <>
+      <h1 className='Pokedex-title'>Pokedex</h1>
+      <div className='Pokedex'>
+        {pokemon.map(p => (
+          <Pokecard key={p.id} id={p.id} name={p.name} type={p.type} base_experience={p.base_experience} />
+        ))}
+      </div>
+    </>
   );
 }
 
