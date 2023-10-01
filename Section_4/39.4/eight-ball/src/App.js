@@ -1,9 +1,9 @@
-import logo from './logo.svg';
 import './App.css';
 import EightBall from './EightBall';
+import answers from './answers';
 
 function App() {
-  return <EightBall />;
+  return <EightBall answers={answers}/>;
 }
 
 export default App;
