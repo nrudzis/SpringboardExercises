@@ -1,0 +1,19 @@
+.EightBall {
+  display: flex;
+  flex-direction: column;
+  height: 150px;
+  width: 150px;
+  background-color: black;
+  border-radius: 50%;
+}
+
+.EightBall-msg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+  width: 106px;
+  height: 106px;
+  margin: 22px 22px 22px 22px;
+}
