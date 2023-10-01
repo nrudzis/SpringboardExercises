@@ -3,7 +3,11 @@ import EightBall from './EightBall';
 import answers from './answers';
 
 function App() {
-  return <EightBall answers={answers}/>;
+  return (
+    <div className='App'>
+      <EightBall answers={answers}/>
+    </div>
+  );
 }
 
 export default App;
