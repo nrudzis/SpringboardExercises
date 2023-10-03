@@ -44,3 +44,25 @@ it("moves to the first image when clicking left arrow from the second image", fu
   expect(queryByAltText("Photo by Richard Pasquarella on Unsplash")).toBeInTheDocument();
   expect(queryByAltText("Photo by Pratik Patel on Unsplash")).not.toBeInTheDocument();
 });
+
+it("should not have the left arrow with the first image", function() {
+  const { queryByTestId, queryByAltText } = render(<Carousel />)
+
+  // expect no left arrow with the first image in the carousel
+  const leftArrow = queryByTestId("left-arrow");
+  expect(leftArrow).toBeNull();
+});
+
+it("should not have the right arrow with the third image", function() {
+  const { queryByTestId, queryByAltText } = render(<Carousel />)
+
+  // move to the third image in the carousel
+  let rightArrow = queryByTestId("right-arrow");
+  fireEvent.click(rightArrow);
+  rightArrow = queryByTestId("right-arrow");
+  fireEvent.click(rightArrow);
+
+  // expect no right arrow
+  rightArrow = queryByTestId("right-arrow");
+  expect(rightArrow).toBeNull();
+});
