@@ -28,3 +28,19 @@ it("works when you click on the right arrow", function() {
   expect(queryByAltText("Photo by Richard Pasquarella on Unsplash")).not.toBeInTheDocument();
   expect(queryByAltText("Photo by Pratik Patel on Unsplash")).toBeInTheDocument();
 });
+
+it("moves to the first image when clicking left arrow from the second image", function() {
+  const { queryByTestId, queryByAltText } = render(<Carousel />)
+
+  // move to the second image in the carousel
+  const rightArrow = queryByTestId("right-arrow");
+  fireEvent.click(rightArrow);
+
+  // move to the first image in the carousel
+  const leftArrow = queryByTestId("left-arrow");
+  fireEvent.click(leftArrow);
+
+  // expect the first image to show, not the second
+  expect(queryByAltText("Photo by Richard Pasquarella on Unsplash")).toBeInTheDocument();
+  expect(queryByAltText("Photo by Pratik Patel on Unsplash")).not.toBeInTheDocument();
+});
