@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
+import NavBar from './NavBar';
 import SnackList from './SnackList';
 import Snack from './Snack';
 
@@ -8,11 +9,12 @@ const VendingMachine = () => {
 
   return (
     <>
+      <NavBar snacks={snacks} />
       <h1>IT IS I, VENDING MACHINE</h1>
       <Routes>
-        <Route key={0} exact path={'/'} element={<SnackList snacks={snacks} />} />
+        <Route key={0} path={'/'} element={<SnackList snacks={snacks} />} />
         {snacks.map((snack, index) => (
-          <Route key={index + 1} exact path={`/${snack}`} element={<Snack snackType={snack} />} />
+          <Route key={index + 1} path={`/${snack}`} element={<Snack snackType={snack} />} />
         ))}
       </Routes>
     </>

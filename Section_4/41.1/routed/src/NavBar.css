@@ -1,0 +1,13 @@
+.Navbar {
+  background-color: cornflowerblue;
+  padding: 10px;
+}
+
+.Navbar a {
+  margin: 10px;
+  color: rgba(255,255,255, 0.6);
+}
+
+.Navbar a.active {
+  color: rgba(255,255,255);
+}

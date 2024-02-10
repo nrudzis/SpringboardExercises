@@ -5,7 +5,7 @@ const SnackList = ({ snacks }) => {
       <ul>
         {snacks.map((snack, index) => (
           <li key={index}>
-            <Link exact to={`/${snack}`}>{snack.charAt(0).toUpperCase() + snack.slice(1)}</Link>
+            <Link to={`/${snack}`}>{snack.charAt(0).toUpperCase() + snack.slice(1)}</Link>
           </li>
         ))}
       </ul>
