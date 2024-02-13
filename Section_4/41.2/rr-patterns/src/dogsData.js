@@ -1,5 +1,11 @@
+import dukeImg from './dog-images/duke.jpg';
+import perryImg from './dog-images/perry.jpg';
+import tubbyImg from './dog-images/tubby.jpg';
+import whiskeyImg from './dog-images/whiskey.jpg';
+
 const dogs = [
   {
+    img: whiskeyImg,
     name: "Whiskey",
     age: 5,
     src: "whiskey",
@@ -10,6 +16,7 @@ const dogs = [
     ]
   },
   {
+    img: dukeImg,
     name: "Duke",
     age: 3,
     src: "duke",
@@ -20,6 +27,8 @@ const dogs = [
     ]
   },
   {
+
+    img: perryImg,
     name: "Perry",
     age: 4,
     src: "perry",
@@ -30,6 +39,7 @@ const dogs = [
     ]
   },
   {
+    img: tubbyImg,
     name: "Tubby",
     age: 4,
     src: "tubby",

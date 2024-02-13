@@ -1,9 +1,5 @@
 import './App.css';
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Navigate,
-} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import dogs from './dogsData';
 import DogList from './DogList';
 import DogDetails from './DogDetails';
