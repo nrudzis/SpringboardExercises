@@ -2,30 +2,35 @@ import './App.css';
 import {
   createBrowserRouter,
   RouterProvider,
-  Routes,
-  Route,
-  Navigate
+  Navigate,
 } from 'react-router-dom';
-import dogData from './dogsData';
+import dogs from './dogsData';
 import DogList from './DogList';
 import DogDetails from './DogDetails';
 
 const router = createBrowserRouter([
-  { path: "*", Component: Root },
+  {
+    element: <DogList dogs={dogs} />,
+    path: '/dogs'
+  },
+  {
+    element: <DogDetails />,
+    path: '/dogs/:name',
+    loader: ({ params }) => {
+      const dog = dogs.find(dog => dog.src === params.name);
+      return dog || null;
+    }
+  },
+  {
+    path: "*",
+    element: <Navigate to='/dogs' />
+  }
 ]);
 
-function App() {
-  return <RouterProvider router={router} />
-};
-
-function Root({ dogs=dogData }) {
+const App = () => {
   return (
     <div className="App">
-      <Routes>
-        <Route path='/dogs' element={<DogList dogs={dogs} />} />
-        <Route path='/dogs/:name' element={<DogDetails dogs={dogs} />} />
-        <Route path='*' element={<Navigate to='/dogs' />} />
-      </Routes>
+      <RouterProvider router={router} />
     </div>
   );
 };

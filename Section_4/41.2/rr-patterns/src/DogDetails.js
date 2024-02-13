@@ -1,10 +1,8 @@
-import { useParams, Navigate } from 'react-router-dom';
+import { useLoaderData, Navigate } from 'react-router-dom';
 
-const DogDetails = ({ dogs }) => {
+const DogDetails = () => {
 
-  const { name } = useParams();
-
-  const dog = dogs.find(dog => dog.src === name);
+  const dog = useLoaderData();
 
   if (dog) {
     return (
@@ -26,7 +24,8 @@ const DogDetails = ({ dogs }) => {
         ))}
       </>
     );
-  } else {
+  }
+  else {
     return (<Navigate to='/dogs' />);
   }
 };

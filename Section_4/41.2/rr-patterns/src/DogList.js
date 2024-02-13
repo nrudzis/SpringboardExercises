@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 const DogList = ({ dogs }) => {
-  return ( 
+  return (
     <>
       <h1>Dog List</h1>
       <ul>
