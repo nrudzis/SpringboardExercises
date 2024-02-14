@@ -5,7 +5,6 @@ const DogDetails = () => {
   const dog = useLoaderData();
 
   if (dog) {
-    console.log(dog)
     return (
       <>
         <h1>Dog Details</h1>
