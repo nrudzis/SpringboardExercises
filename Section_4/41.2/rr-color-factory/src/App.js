@@ -1,23 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import ColorLinks from './ColorLinks';
+import colors from './colorData';
 
-function App() {
+const router = createBrowserRouter([
+  {
+    element: <ColorLinks colors={colors} />,
+    path: '/colors'
+  },
+  {
+    path: "*",
+    element: <Navigate to='/colors' />
+  }
+]);
+
+const App = () => {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <RouterProvider router={router} />
     </div>
   );
 }
