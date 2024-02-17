@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const ColorLinks = ({ colors }) => {
   return (
     <>
@@ -6,8 +8,7 @@ const ColorLinks = ({ colors }) => {
       <ul>
         {colors.map((color, index) => (
           <li key={index}>
-          {color.text}
-          {/*<Link to={`/colors/${color.src}`}>{color.text}</Link>*/}
+            <Link to={`/colors/${color.text}`}>{color.text}</Link>
           </li>
         ))}
       </ul>
