@@ -9,7 +9,7 @@ const ColorLinks = ({ colors }) => {
       </h1>
       <ul>
         {colors.map((color, index) => (
-          <li key={index}>
+          <li key={index} style={{ listStyle: 'none' }}>
             <Link to={`/colors/${color.text}`}>{color.text}</Link>
           </li>
         ))}
