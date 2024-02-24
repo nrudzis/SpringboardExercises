@@ -1,24 +1,37 @@
-import { useState, useEffect } from "react";
+import React from 'react';
 import axios from "axios";
 import Joke from "./Joke";
 import "./JokeList.css";
 
-function JokeList({ numJokesToGet = 10 }) {
-  const [jokes, setJokes] = useState([]);
+class JokeList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      numJokesToGet: this.props.numJokesToGet || 10,
+      jokes: [],
+    };
+    this.setJokes = this.setJokes.bind(this);
+    this.getJokesAndUpdate = this.getJokesAndUpdate.bind(this);
+    this.vote = this.vote.bind(this);
+  }
+
+  setJokes(jokes) {
+    this.setState({ jokes: jokes });
+  }
 
   /* get jokes if there are no jokes */
 
-  useEffect(function() {
-    async function getJokes() {
-      let j = [...jokes];
+  getJokesAndUpdate() {
+    const getJokes = async () => {
+      let j = [...this.state.jokes];
       let seenJokes = new Set();
       try {
-        while (j.length < numJokesToGet) {
+        while (j.length < this.state.numJokesToGet) {
           let res = await axios.get("https://icanhazdadjoke.com", {
             headers: { Accept: "application/json" }
           });
           let { status, ...jokeObj } = res.data;
-  
+
           if (!seenJokes.has(jokeObj.id)) {
             seenJokes.add(jokeObj.id);
             j.push({ ...jokeObj, votes: 0 });
@@ -26,49 +39,61 @@ function JokeList({ numJokesToGet = 10 }) {
             console.error("duplicate found!");
           }
         }
-        setJokes(j);
+        this.setJokes(j);
       } catch (e) {
         console.log(e);
       }
     }
-
-    if (jokes.length === 0) getJokes();
-  }, [jokes, numJokesToGet]);
+    if (this.state.jokes.length === 0) getJokes();
+  }
 
   /* empty joke list and then call getJokes */
 
-  function generateNewJokes() {
-    setJokes([]);
+  generateNewJokes() {
+    this.setJokes([]);
   }
 
   /* change vote for this id by delta (+1 or -1) */
 
-  function vote(id, delta) {
-    setJokes(allJokes =>
-      allJokes.map(j => (j.id === id ? { ...j, votes: j.votes + delta } : j))
-    );
+  vote(id, delta) {
+    let allJokes = this.state.jokes;
+    this.setJokes(allJokes.map(j => (
+      j.id === id ? { ...j, votes: j.votes + delta } : j
+    )));
+  }
+
+  /* get jokes and update state when component mounts or updates */
+
+  componentDidMount() {
+    this.getJokesAndUpdate();
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (this.state.numJokesToGet !== prevState.numJokesToGet || this.state.jokes !== prevState.jokes) {
+      this.getJokesAndUpdate();
+    }
   }
 
   /* render: either loading spinner or list of sorted jokes. */
 
-  if (jokes.length) {
-    let sortedJokes = [...jokes].sort((a, b) => b.votes - a.votes);
-  
-    return (
-      <div className="JokeList">
-        <button className="JokeList-getmore" onClick={generateNewJokes}>
-          Get New Jokes
-        </button>
-  
-        {sortedJokes.map(j => (
-          <Joke text={j.joke} key={j.id} id={j.id} votes={j.votes} vote={vote} />
-        ))}
-      </div>
-    );
+  render() {
+    if (this.state.jokes.length) {
+      let sortedJokes = [...this.state.jokes].sort((a, b) => b.votes - a.votes);
+
+      return (
+        <div className="JokeList">
+          <button className="JokeList-getmore" onClick={() => this.generateNewJokes()}>
+            Get New Jokes
+          </button>
+
+          {sortedJokes.map(j => (
+            <Joke text={j.joke} key={j.id} id={j.id} votes={j.votes} vote={this.vote} />
+          ))}
+        </div>
+      );
+    }
+    return null;
   }
-
-  return null;
-
 }
 
 export default JokeList;
