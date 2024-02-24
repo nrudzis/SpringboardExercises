@@ -92,7 +92,9 @@ class JokeList extends React.Component {
         </div>
       );
     }
-    return null;
+    return (
+      <div className="loading"></div>
+    );
   }
 }
 

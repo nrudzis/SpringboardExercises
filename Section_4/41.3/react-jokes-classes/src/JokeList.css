@@ -1,9 +1,15 @@
 @import url("https://use.fontawesome.com/releases/v6.5.1/css/all.css");
 
 .loading {
+  font-size: 30px;
   width: 4em;
   margin: 200px auto 0 auto;
   color: tomato;
+  animation: fa-spin 2s infinite linear;
+  &::before {
+    font: var(--fa-font-solid);
+    content: '\f110';
+  }
 }
 
 .JokeList-getmore {
