@@ -39,7 +39,7 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
 
 /** Helper function for filtering companies in GET /findAll.
  *
- * Takes query parameters from request body.
+ * Takes query parameters from request object.
  *
  * Returns parameterized SQL string of columns and array of values to filter by.
  * Throws BadRequestError if query parameters or values are invalid.
