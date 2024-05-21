@@ -87,7 +87,7 @@ describe("findAll", function () {
     ]);
   });
 
-  test("works: filter 1", async function () {
+  test("works: filter 1, name", async function () {
     const queryParams = {
       name: "2",
     };
@@ -103,7 +103,7 @@ describe("findAll", function () {
     ]);
   });
 
-  test("works: filter 2", async function () {
+  test("works: filter 2, minEmployees", async function () {
     const queryParams = {
       minEmployees: 2
     };
@@ -124,6 +124,18 @@ describe("findAll", function () {
         logoUrl: "http://c3.img",
       },
     ]);
+  });
+
+  test("works: filter 3, not found", async function () {
+    const queryParams = {
+      minEmployees: 100
+    };
+    try {
+      await Company.findAll(queryParams);
+      fail();
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    };
   });
 });
 
