@@ -37,14 +37,18 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   };
 }
 
-/** TODO: expand docstring
- * helper function
- * checks for invalid query params,
- * if invalid, throws error
- * else returns sql string needed to complete db query
+/** Helper function for filtering companies in GET /findAll.
+ *
+ * Takes query parameters from request body.
+ *
+ * Returns parameterized SQL string of columns and array of values to filter by.
+ * Throws BadRequestError if query parameters or values are invalid.
+ *
+ * { name: "net", minEmployees: 20, maxEmployees: 75 } =>
+ * { whereCols: '"name" ILIKE $1 AND "num_employees">=$2 AND "num_employees"<=$3', values: ["%net%", 20, 75] }
  */
 
-function sqlForFindAll(params) {
+function sqlForFilterCompanies(params) {
   const keys = Object.keys(params);
 
   // Ensure params are valid
@@ -59,13 +63,13 @@ function sqlForFindAll(params) {
     throw new BadRequestError("minEmployees cannot be greater than maxEmployees");
   }
 
-  // {name: 'net', maxEmployees: 1000} => ['"name"=$1', '"num_employees"<=$2']
+  // {name: 'net', maxEmployees: 1000} => ['"name" ILIKE $1', '"num_employees"<=$2']
   const cols = [];
-  const updatedParams = { ...params };
+  const newParams = { ...params };
   keys.forEach((colName, idx) => {
     if (colName === "name") {
       cols.push(`"name" ILIKE $${idx + 1}`);
-      updatedParams[colName] = `%${params[colName]}%`;
+      newParams[colName] = `%${params[colName]}%`;
     } else if (colName === "minEmployees") {
       cols.push(`"num_employees">=$${idx + 1}`);
     } else if (colName === "maxEmployees") {
@@ -75,8 +79,8 @@ function sqlForFindAll(params) {
 
   return {
     whereCols: cols.join(" AND "),
-    values: Object.values(updatedParams)
+    values: Object.values(newParams)
   };
 }
 
-module.exports = { sqlForPartialUpdate, sqlForFindAll };
+module.exports = { sqlForPartialUpdate, sqlForFilterCompanies };
