@@ -61,66 +61,72 @@ describe("authenticateJWT", function () {
 
 describe("ensureAdmin", function () {
   test("works", function () {
-    expect.assertions(1);
+    expect.assertions(2);
     const req = {};
-    const res = { locals: { user: { username: "test", is_admin: true} } };
+    const res = { locals: { user: { username: "test", isAdmin: true} } };
     const next = function (err) {
       expect(err).toBeFalsy();
     };
     ensureAdmin(req, res, next);
+    expect(req.isAuthorized).toBeTruthy();
   });
 
   test("unauth if not admin", function () {
-    expect.assertions(1);
+    expect.assertions(2);
     const req = {};
-    const res = { locals: { user: { username: "test", is_admin: false} } };
-    const next = function (req) {
-      expect(req.isAuthorized).toBeFalsy();
+    const res = { locals: { user: { username: "test", isAdmin: false} } };
+    const next = function (err) {
+      expect(err).toBeFalsy();
     };
     ensureAdmin(req, res, next);
+    expect(req.isAuthorized).toBeFalsy();
   });
 
   test("unauth if no login", function () {
-    expect.assertions(1);
+    expect.assertions(2);
     const req = {};
     const res = { locals: {} };
-    const next = function (req) {
-      expect(req.isAuthorized).toBeFalsy();
+    const next = function (err) {
+      expect(err).toBeFalsy();
     };
     ensureAdmin(req, res, next);
+    expect(req.isAuthorized).toBeFalsy();
   });
 });
 
 
 describe("ensureSameUser", function () {
   test("works", function () {
-    expect.assertions(1);
+    expect.assertions(2);
     const req = { params: { username: "test" } };
-    const res = { locals: { user: { username: "test", is_admin: false} } };
+    const res = { locals: { user: { username: "test", isAdmin: false} } };
     const next = function (err) {
       expect(err).toBeFalsy();
     };
     ensureSameUser(req, res, next);
+    expect(req.isAuthorized).toBeTruthy();
   });
 
   test("unauth if not same user", function () {
-    expect.assertions(1);
+    expect.assertions(2);
     const req = { params: { username: "wrong" } };
-    const res = { locals: { user: { username: "test", is_admin: false} } };
-    const next = function (req) {
-      expect(req.isAuthorized).toBeFalsy();
+    const res = { locals: { user: { username: "test", isAdmin: false} } };
+    const next = function (err) {
+      expect(err).toBeFalsy();
     };
     ensureSameUser(req, res, next);
+    expect(req.isAuthorized).toBeFalsy();
   });
 
   test("unauth if no login", function () {
-    expect.assertions(1);
+    expect.assertions(2);
     const req = {};
     const res = { locals: {} };
-    const next = function (req) {
-      expect(req.isAuthorized).toBeFalsy();
+    const next = function (err) {
+      expect(err).toBeFalsy();
     };
     ensureSameUser(req, res, next);
+    expect(req.isAuthorized).toBeFalsy();
   });
 });
 
