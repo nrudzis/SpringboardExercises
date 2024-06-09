@@ -28,9 +28,9 @@ function authenticateJWT(req, res, next) {
   }
 }
 
-/** Middleware to use when they must be logged in.
+/** Middleware to use when they must be an admin.
  *
- * If not, raises Unauthorized.
+ * Must always use `handleUnauthorized` middleware after it.
  */
 
 function ensureAdmin(req, res, next) {
@@ -44,6 +44,11 @@ function ensureAdmin(req, res, next) {
   }
 }
 
+/** Middleware to use when they must be the same user.
+ *
+ * Must always use `handleUnauthorized` middleware after it.
+ */
+
 function ensureSameUser(req, res, next) {
   try {
     if (res.locals.user && res.locals.user.username === req.params.username) {
@@ -54,6 +59,14 @@ function ensureSameUser(req, res, next) {
     return next(err);
   }
 }
+
+/** Middleware to handle unauthorized.
+  *
+  * Always included after any single or multiple `ensure*` middlewares.
+  *
+  * router.get('/some-route', [ensureAdmin, ensureSameUser, handleUnauthorized], async function (req, res, next) { ... })
+  * router.get('/another-route', [ensureAdmin, handleUnauthorized], async function (req, res, next) { ... })
+  */
 
 function handleUnauthorized (req, res, next) {
   try {

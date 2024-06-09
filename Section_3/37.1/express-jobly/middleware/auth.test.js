@@ -4,7 +4,9 @@ const jwt = require("jsonwebtoken");
 const { UnauthorizedError } = require("../expressError");
 const {
   authenticateJWT,
-  ensureLoggedIn,
+  ensureAdmin,
+  ensureSameUser,
+  handleUnauthorized,
 } = require("./auth");
 
 
@@ -57,24 +59,89 @@ describe("authenticateJWT", function () {
 });
 
 
-describe("ensureLoggedIn", function () {
+describe("ensureAdmin", function () {
   test("works", function () {
     expect.assertions(1);
     const req = {};
-    const res = { locals: { user: { username: "test", is_admin: false } } };
+    const res = { locals: { user: { username: "test", is_admin: true} } };
     const next = function (err) {
       expect(err).toBeFalsy();
     };
-    ensureLoggedIn(req, res, next);
+    ensureAdmin(req, res, next);
+  });
+
+  test("unauth if not admin", function () {
+    expect.assertions(1);
+    const req = {};
+    const res = { locals: { user: { username: "test", is_admin: false} } };
+    const next = function (req) {
+      expect(req.isAuthorized).toBeFalsy();
+    };
+    ensureAdmin(req, res, next);
   });
 
   test("unauth if no login", function () {
     expect.assertions(1);
     const req = {};
     const res = { locals: {} };
+    const next = function (req) {
+      expect(req.isAuthorized).toBeFalsy();
+    };
+    ensureAdmin(req, res, next);
+  });
+});
+
+
+describe("ensureSameUser", function () {
+  test("works", function () {
+    expect.assertions(1);
+    const req = { params: { username: "test" } };
+    const res = { locals: { user: { username: "test", is_admin: false} } };
+    const next = function (err) {
+      expect(err).toBeFalsy();
+    };
+    ensureSameUser(req, res, next);
+  });
+
+  test("unauth if not same user", function () {
+    expect.assertions(1);
+    const req = { params: { username: "wrong" } };
+    const res = { locals: { user: { username: "test", is_admin: false} } };
+    const next = function (req) {
+      expect(req.isAuthorized).toBeFalsy();
+    };
+    ensureSameUser(req, res, next);
+  });
+
+  test("unauth if no login", function () {
+    expect.assertions(1);
+    const req = {};
+    const res = { locals: {} };
+    const next = function (req) {
+      expect(req.isAuthorized).toBeFalsy();
+    };
+    ensureSameUser(req, res, next);
+  });
+});
+
+describe("handleUnauthorized", function () {
+  test("works", function () {
+    expect.assertions(1);
+    const req = { isAuthorized: true };
+    const res = {};
+    const next = function (err) {
+      expect(err).toBeFalsy();
+    };
+    handleUnauthorized(req, res, next);
+  });
+
+  test("throws UnauthorizedError if not authorized", function () {
+    expect.assertions(1);
+    const req = {};
+    const res = {};
     const next = function (err) {
       expect(err instanceof UnauthorizedError).toBeTruthy();
     };
-    ensureLoggedIn(req, res, next);
+    handleUnauthorized(req, res, next);
   });
 });
