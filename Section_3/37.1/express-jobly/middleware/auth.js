@@ -35,15 +35,38 @@ function authenticateJWT(req, res, next) {
 
 function ensureAdmin(req, res, next) {
   try {
-    if (!res.locals.user || !res.locals.user.isAdmin) throw new UnauthorizedError();
+    if (res.locals.user && res.locals.user.isAdmin) {
+      req.isAuthorized = true;
+    }
     return next();
   } catch (err) {
     return next(err);
   }
 }
 
+function ensureSameUser(req, res, next) {
+  try {
+    if (res.locals.user && res.locals.user.username === req.params.username) {
+      req.isAuthorized = true;
+    }
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+}
+
+function handleUnauthorized (req, res, next) {
+  try {
+    if (!req.isAuthorized) throw new UnauthorizedError();
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+}
 
 module.exports = {
   authenticateJWT,
   ensureAdmin,
+  ensureSameUser,
+  handleUnauthorized
 };
