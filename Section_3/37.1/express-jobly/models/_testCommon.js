@@ -9,7 +9,7 @@ async function commonBeforeAll() {
   // noinspection SqlWithoutWhere
   await db.query("DELETE FROM users");
   // noinspection SqlWithoutWhere
-  await db.query("DELETE FROM jobs");
+  await db.query("TRUNCATE TABLE jobs RESTART IDENTITY CASCADE");
 
   await db.query(`
     INSERT INTO companies(handle, name, num_employees, description, logo_url)

@@ -3,7 +3,7 @@ const { BadRequestError } = require("../expressError");
 /** Generic helper function for partial updates. Used by `update` methods on
  * models.
  *
- * Takes update data and object mapping particular model JS-formatted keys to
+ * Takes update data and optional object mapping particular model JS-formatted keys to
  * JSON-formatted keys (camelCased to snake_cased).
  *
  * Returns parameterized SQL string of columns to set and array of values to update to.
@@ -20,9 +20,14 @@ const { BadRequestError } = require("../expressError");
  *   { firstName: "first_name", lastName: "last_name", isAdmin: "is_admin"}) =>
  *   { setCols: '"first_name"=$1, "email"=$2, "is_admin"=$3',
  *   values: ["Newname", "newemail@blabla.com", true] }
+ *
+ * Jobs example:
+ *   { title: "Newtitle", salary: 500, equity: 0.01 } =>
+ *   { setCols: '"title"=$1, "salary"=$2, "equity"=$3',
+ *   values: ["Newtitle", 500, 0.01] }
  */
 
-function sqlForPartialUpdate(dataToUpdate, jsToSql) {
+function sqlForPartialUpdate(dataToUpdate, jsToSql = {}) {
   const keys = Object.keys(dataToUpdate);
   if (keys.length === 0) throw new BadRequestError("No data");
 
@@ -104,7 +109,7 @@ function sqlForFilterJobs(params) {
     throw new BadRequestError(`Invalid parameter. Must be one of: ${validParams.join(", ")}`);
   }
 
-  // {title: 'tech', minSalary: 55, hasEquity: true} => ['"title" ILIKE $1', '"salary">=$2', '"equity">$3']
+  // {title: 'tech', minSalary: 200, hasEquity: true} => ['"title" ILIKE $1', '"salary">=$2', '"equity">$3']
   const cols = [];
   const newParams = { ...params };
   keys.forEach((colName, idx) => {
