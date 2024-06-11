@@ -83,4 +83,52 @@ function sqlForFilterCompanies(params) {
   };
 }
 
-module.exports = { sqlForPartialUpdate, sqlForFilterCompanies };
+/** Helper function for filtering jobs in GET /findAll
+ *
+ * Takes query parameters from request object.
+ *
+ * Returns parameterized SQL string of columns and array of values to filter by.
+ * Throws BadRequestError if query parameters or values are invalid.
+ *
+ * { title: "tech", minSalary: 200, hasEquity: true } =>
+ * { whereCols: '"title" ILIKE $1 AND "salary">=$2 AND "equity">=$3', values: ["%tech%", 200, 0] }
+ */
+
+function sqlForFilterJobs(params) {
+  const keys = Object.keys(params);
+
+  // Ensure params are valid
+  const validParams = ["title", "minSalary", "hasEquity"];
+
+  if (!keys.every(key => validParams.includes(key))) {
+    throw new BadRequestError(`Invalid parameter. Must be one of: ${validParams.join(", ")}`);
+  }
+
+  // {title: 'tech', minSalary: 55, hasEquity: true} => ['"title" ILIKE $1', '"salary">=$2', '"equity">$3']
+  const cols = [];
+  const newParams = { ...params };
+  keys.forEach((colName, idx) => {
+    if (colName === "title") {
+      cols.push(`"title" ILIKE $${idx + 1}`);
+      newParams[colName] = `%${params[colName]}%`;
+    } else if (colName === "minSalary") {
+      cols.push(`"salary">=$${idx + 1}`);
+    } else if (colName === "hasEquity") {
+
+      // if `hasEquity` is true, filter jobs with > 0 equity, otherwise disregard
+      if (params[colName]) {
+        cols.push(`"equity">$${idx + 1}`);
+        newParams[colName] = 0;
+      } else {
+        delete newParams[colName];
+      }
+    }
+  });
+
+  return {
+    whereCols: cols.join(" AND "),
+    values: Object.values(newParams)
+  };
+}
+
+module.exports = { sqlForPartialUpdate, sqlForFilterCompanies, sqlForFilterJobs };

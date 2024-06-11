@@ -1,4 +1,4 @@
-const { sqlForPartialUpdate, sqlForFilterCompanies } = require("./sql");
+const { sqlForPartialUpdate, sqlForFilterCompanies, sqlForFilterJobs } = require("./sql");
 const { BadRequestError } = require("../expressError");
 
 
@@ -65,19 +65,19 @@ describe("sqlForPartialUpdate", function () {
  * params and expected results
  */
 
-const invalidParams = {
+const invalidCParams = {
   invalid: "iminvalid"
 };
 const badMinMaxVals = {
   minEmployees: 31,
   maxEmployees: 30
 };
-const correctParams = {
+const validCParams = {
   name: 'net',
   minEmployees: 65,
   maxEmployees: 500
 };
-const correctResult = {
+const correctCResult = {
   whereCols: '"name" ILIKE $1 AND "num_employees">=$2 AND "num_employees"<=$3',
   values: ["%net%", 65, 500]
 };
@@ -94,7 +94,7 @@ describe("sqlForFilterCompanies", function() {
 
   test("throws BadRequestError if params are invalid", function () {
     expect(function () {
-      sqlForFilterCompanies(invalidParams);
+      sqlForFilterCompanies(invalidCParams);
     }).toThrow(BadRequestError);
   });
 
@@ -104,8 +104,61 @@ describe("sqlForFilterCompanies", function() {
     }).toThrow(BadRequestError);
   });
 
-  test("outputs expected result with correct params", function() {
-    const result = sqlForFilterCompanies(correctParams);
-    expect(result).toEqual(correctResult);
+  test("outputs expected result with valid params", function() {
+    const result = sqlForFilterCompanies(validCParams);
+    expect(result).toEqual(correctCResult);
+  });
+});
+
+/************************************** sqlForFilterJobs
+ * params and expected results
+ */
+
+const invalidJParams = {
+  invalid: "iminvalid"
+};
+const validJParamsETrue = {
+  title: 'tech',
+  minSalary: 200,
+  hasEquity: true 
+};
+const correctJResultETrue = {
+  whereCols: '"title" ILIKE $1 AND "salary">=$2 AND "equity">$3',
+  values: ["%tech%", 200, 0]
+};
+const validJParamsEFalse = {
+  title: 'tech',
+  minSalary: 200,
+  hasEquity: false 
+};
+const correctJResultEFalse = {
+  whereCols: '"title" ILIKE $1 AND "salary">=$2',
+  values: ["%tech%", 200]
+};
+
+/************************************** sqlForFilterJobs
+ * tests
+ */
+
+describe("sqlForFilterJobs", function() {
+
+  test("is a function", function () {
+    expect(typeof sqlForFilterJobs).toEqual("function");
+  });
+
+  test("throws BadRequestError if params are invalid", function () {
+    expect(function () {
+      sqlForFilterJobs(invalidJParams);
+    }).toThrow(BadRequestError);
+  });
+
+  test("outputs expected result with valid params, hasEquity true", function() {
+    const result = sqlForFilterJobs(validJParamsETrue);
+    expect(result).toEqual(correctJResultETrue);
+  });
+
+  test("outputs expected result with valid params, hasEquity false", function() {
+    const result = sqlForFilterJobs(validJParamsEFalse);
+    expect(result).toEqual(correctJResultEFalse);
   });
 });
