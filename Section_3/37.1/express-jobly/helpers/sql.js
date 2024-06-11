@@ -21,7 +21,7 @@ const { BadRequestError } = require("../expressError");
  *   { setCols: '"first_name"=$1, "email"=$2, "is_admin"=$3',
  *   values: ["Newname", "newemail@blabla.com", true] }
  *
- * Jobs example:
+ * Job example:
  *   { title: "Newtitle", salary: 500, equity: 0.01 } =>
  *   { setCols: '"title"=$1, "salary"=$2, "equity"=$3',
  *   values: ["Newtitle", 500, 0.01] }

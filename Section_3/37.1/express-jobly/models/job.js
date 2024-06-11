@@ -6,7 +6,7 @@ const { sqlForFilterJobs, sqlForPartialUpdate } = require("../helpers/sql");
 
 /** Related functions for jobs. */
 
-class Jobs {
+class Job {
   /** Create a job (from data), update db, return new job data.
    *
    * data should be { title, salary, equity, companyHandle }
@@ -146,4 +146,4 @@ class Jobs {
 }
 
 
-module.exports = Jobs;
+module.exports = Job;

@@ -2,7 +2,7 @@
 
 const db = require("../db.js");
 const { BadRequestError, NotFoundError } = require("../expressError");
-const Jobs = require("./jobs.js");
+const Job = require("./job.js");
 const {
   commonBeforeAll,
   commonBeforeEach,
@@ -26,7 +26,7 @@ describe("create", function () {
   };
 
   test("works", async function () {
-    let job = await Jobs.create(newJob);
+    let job = await Job.create(newJob);
     expect(job).toEqual({
       id: expect.any(Number),
       title: "new",
@@ -56,7 +56,7 @@ describe("create", function () {
 describe("findAll", function () {
   test("works: no filter", async function () {
     const queryParams = {};
-    let jobs = await Jobs.findAll(queryParams);
+    let jobs = await Job.findAll(queryParams);
     expect(jobs).toEqual([
       {
         id: expect.any(Number),
@@ -86,7 +86,7 @@ describe("findAll", function () {
     const queryParams = {
       title: "2",
     };
-    let jobs = await Jobs.findAll(queryParams);
+    let jobs = await Job.findAll(queryParams);
     expect(jobs).toEqual([
       {
         id: expect.any(Number),
@@ -102,7 +102,7 @@ describe("findAll", function () {
     const queryParams = {
       minSalary: 200
     };
-    let jobs = await Jobs.findAll(queryParams);
+    let jobs = await Job.findAll(queryParams);
     expect(jobs).toEqual([
       {
         id: expect.any(Number),
@@ -125,7 +125,7 @@ describe("findAll", function () {
     const queryParams = {
       hasEquity: true 
     };
-    let jobs = await Jobs.findAll(queryParams);
+    let jobs = await Job.findAll(queryParams);
     expect(jobs).toEqual([
       {
         id: expect.any(Number),
@@ -148,7 +148,7 @@ describe("findAll", function () {
     const queryParams = {
       hasEquity: false
     };
-    let jobs = await Jobs.findAll(queryParams);
+    let jobs = await Job.findAll(queryParams);
     expect(jobs).toEqual([
       {
         id: expect.any(Number),
@@ -179,7 +179,7 @@ describe("findAll", function () {
       minSalary: 200,
       hasEquity: false
     };
-    let jobs = await Jobs.findAll(queryParams);
+    let jobs = await Job.findAll(queryParams);
     expect(jobs).toEqual([
       {
         id: expect.any(Number),
@@ -203,7 +203,7 @@ describe("findAll", function () {
       minSalary: 1000
     };
     try {
-      await Jobs.findAll(queryParams);
+      await Job.findAll(queryParams);
       fail();
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
@@ -215,7 +215,7 @@ describe("findAll", function () {
 
 describe("get", function () {
   test("works", async function () {
-    let job = await Jobs.get(1);
+    let job = await Job.get(1);
     expect(job).toEqual({
       id: 1,
       title: "j1",
@@ -227,7 +227,7 @@ describe("get", function () {
 
   test("not found if no such job", async function () {
     try {
-      await Jobs.get(0);
+      await Job.get(0);
       fail();
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
@@ -245,7 +245,7 @@ describe("update", function () {
   };
 
   test("works", async function () {
-    let job = await Jobs.update(1, updateData);
+    let job = await Job.update(1, updateData);
     expect(job).toEqual({
       id: 1,
       title: "New",
@@ -274,7 +274,7 @@ describe("update", function () {
       equity: null
     };
 
-    let job = await Jobs.update(1, updateDataSetNulls);
+    let job = await Job.update(1, updateDataSetNulls);
     expect(job).toEqual({
       id: 1,
       companyHandle: "c1",
@@ -294,7 +294,7 @@ describe("update", function () {
 
   test("not found if no such company", async function () {
     try {
-      await Jobs.update(0, updateData);
+      await Job.update(0, updateData);
       fail();
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
@@ -303,7 +303,7 @@ describe("update", function () {
 
   test("bad request with no data", async function () {
     try {
-      await Jobs.update(1, {});
+      await Job.update(1, {});
       fail();
     } catch (err) {
       expect(err instanceof BadRequestError).toBeTruthy();
@@ -315,7 +315,7 @@ describe("update", function () {
 
 describe("remove", function () {
   test("works", async function () {
-    await Jobs.remove(1);
+    await Job.remove(1);
     const res = await db.query(
         "SELECT id FROM jobs WHERE id=1");
     expect(res.rows.length).toEqual(0);
@@ -323,7 +323,7 @@ describe("remove", function () {
 
   test("not found if no such job", async function () {
     try {
-      await Jobs.remove(0);
+      await Job.remove(0);
       fail();
     } catch (err) {
       expect(err instanceof NotFoundError).toBeTruthy();
