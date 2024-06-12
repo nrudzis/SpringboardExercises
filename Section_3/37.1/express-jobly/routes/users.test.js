@@ -391,3 +391,91 @@ describe("DELETE /users/:username", function () {
     expect(resp.statusCode).toEqual(404);
   });
 });
+
+
+/************************************** POST /users/:username/jobs/:id */
+
+describe("POST /users/:username/jobs/:id", function () {
+  test("works for admin users", async function () {
+    const resp = await request(app)
+        .post(`/users/u2/jobs/1`)
+        .send({
+          username: "u2",
+          id: 1
+        })
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.body).toEqual({ applied: "1" });
+  });
+
+  test("works for same user", async function () {
+    const resp = await request(app)
+        .post(`/users/u2/jobs/1`)
+        .send({
+          username: "u2",
+          id: 1
+        })
+        .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.body).toEqual({ applied: "1" });
+  });
+
+  test("unauth for different user", async function () {
+    const resp = await request(app)
+        .post(`/users/u2/jobs/1`)
+        .send({
+          username: "u2",
+          id: 1
+        })
+        .set("authorization", `Bearer ${u3Token}`);
+    expect(resp.statusCode).toEqual(401);
+  });
+
+  test("unauth for anon", async function () {
+    const resp = await request(app)
+        .post(`/users/u2/jobs/1`)
+        .send({
+          username: "u2",
+          id: 1
+        })
+    expect(resp.statusCode).toEqual(401);
+  });
+
+  test("not found if no such user", async function () {
+    const resp = await request(app)
+        .post(`/users/nope/jobs/1`)
+        .send({
+          username: "nope",
+          id: 1
+        })
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(404);
+  });
+
+  test("not found if no such job", async function () {
+    const resp = await request(app)
+        .post(`/users/u2/jobs/0`)
+        .send({
+          username: "u2",
+          id: 0
+        })
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(404);
+  });
+
+  test("bad request with dup app", async function () {
+    await request(app)
+        .post(`/users/u2/jobs/1`)
+        .send({
+          username: "u2",
+          id: 1
+        })
+        .set("authorization", `Bearer ${u1Token}`);
+    const resp = await request(app)
+        .post(`/users/u2/jobs/1`)
+        .send({
+          username: "u2",
+          id: 1
+        })
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(400);
+  });
+});
