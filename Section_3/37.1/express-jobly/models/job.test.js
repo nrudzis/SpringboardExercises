@@ -70,7 +70,7 @@ describe("findAll", function () {
         title: "j2",
         salary: 200,
         equity: "0.4",
-        companyHandle: "c2"
+        companyHandle: "c1"
       },
       {
         id: expect.any(Number),
@@ -93,7 +93,7 @@ describe("findAll", function () {
         title: "j2",
         salary: 200,
         equity: "0.4",
-        companyHandle: "c2",
+        companyHandle: "c1",
       },
     ]);
   });
@@ -109,7 +109,7 @@ describe("findAll", function () {
         title: "j2",
         salary: 200,
         equity: "0.4",
-        companyHandle: "c2"
+        companyHandle: "c1"
       },
       {
         id: expect.any(Number),
@@ -139,7 +139,7 @@ describe("findAll", function () {
         title: "j2",
         salary: 200,
         equity: "0.4",
-        companyHandle: "c2"
+        companyHandle: "c1"
       },
     ]);
   });
@@ -162,7 +162,7 @@ describe("findAll", function () {
         title: "j2",
         salary: 200,
         equity: "0.4",
-        companyHandle: "c2"
+        companyHandle: "c1"
       },
       {
         id: expect.any(Number),
@@ -186,7 +186,7 @@ describe("findAll", function () {
         title: "j2",
         salary: 200,
         equity: "0.4",
-        companyHandle: "c2"
+        companyHandle: "c1"
       },
       {
         id: expect.any(Number),

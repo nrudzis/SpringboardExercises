@@ -85,25 +85,50 @@ class Company {
   /** Given a company handle, return data about company.
    *
    * Returns { handle, name, description, numEmployees, logoUrl, jobs }
-   *   where jobs is [{ id, title, salary, equity, companyHandle }, ...]
+   *   where jobs is [{ id, title, salary, equity }, ...]
    *
    * Throws NotFoundError if not found.
    **/
 
   static async get(handle) {
     const companyRes = await db.query(
-          `SELECT handle,
-                  name,
-                  description,
-                  num_employees AS "numEmployees",
-                  logo_url AS "logoUrl"
-           FROM companies
-           WHERE handle = $1`,
+          `SELECT c.handle,
+                  c.name,
+                  c.description,
+                  c.num_employees AS "numEmployees",
+                  c.logo_url AS "logoUrl",
+                  j.id,
+                  j.title,
+                  j.salary,
+                  j.equity,
+                  j.company_handle AS "companyHandle"
+           FROM companies c
+           LEFT JOIN jobs j
+           ON c.handle = j.company_handle
+           WHERE c.handle = $1`,
         [handle]);
 
-    const company = companyRes.rows[0];
+    if (companyRes.rows.length === 0) throw new NotFoundError(`No company: ${handle}`);
 
-    if (!company) throw new NotFoundError(`No company: ${handle}`);
+    const company = {
+      handle: companyRes.rows[0].handle,
+      name: companyRes.rows[0].name,
+      description: companyRes.rows[0].description,
+      numEmployees: companyRes.rows[0].numEmployees,
+      logoUrl: companyRes.rows[0].logoUrl,
+      jobs: []
+    }
+
+    companyRes.rows.forEach(row => {
+      if (row.id) {
+        company.jobs.push({
+          id: row.id,
+          title: row.title,
+          salary: row.salary,
+          equity: row.equity
+        });
+      }
+    });
 
     return company;
   }
