@@ -228,3 +228,69 @@ describe("remove", function () {
     }
   });
 });
+
+/************************************** apply */
+
+describe("apply", function() {
+  test("works", async function () {
+    let jobApp = await User.apply("u1", 1);
+    expect(jobApp).toEqual({
+      username: "u1",
+      jobId: 1
+    });
+  });
+
+  test("works: same job, different users", async function () {
+    let jobApp1 = await User.apply("u1", 1);
+    let jobApp2 = await User.apply("u2", 1);
+    expect(jobApp1).toEqual({
+      username: "u1",
+      jobId: 1
+    });
+    expect(jobApp2).toEqual({
+      username: "u2",
+      jobId: 1
+    });
+  });
+
+  test("works: same user, different jobs", async function () {
+    let jobApp1 = await User.apply("u1", 1);
+    let jobApp2 = await User.apply("u1", 2);
+    expect(jobApp1).toEqual({
+      username: "u1",
+      jobId: 1
+    });
+    expect(jobApp2).toEqual({
+      username: "u1",
+      jobId: 2
+    });
+  });
+
+  test("not found if no such user", async function () {
+    try {
+      let jobApp = await User.apply("nope", 1);
+      fail();
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+
+  test("not found if no such job", async function () {
+    try {
+      let jobApp = await User.apply("u1", 0);
+      fail();
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+
+  test("bad request with dup app", async function () {
+    try {
+      await User.apply("u1", 1);
+      await User.apply("u1", 1);
+      fail();
+    } catch (err) {
+      expect(err instanceof BadRequestError).toBeTruthy();
+    }
+  });
+});
