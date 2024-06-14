@@ -140,6 +140,7 @@ describe("get", function () {
       lastName: "U1L",
       email: "u1@email.com",
       isAdmin: false,
+      jobs: [1, 2]
     });
   });
 
@@ -233,36 +234,36 @@ describe("remove", function () {
 
 describe("apply", function() {
   test("works", async function () {
-    let jobApp = await User.apply("u1", 1);
+    let jobApp = await User.apply("u1", 3);
     expect(jobApp).toEqual({
       username: "u1",
-      jobId: 1
+      jobId: 3
     });
   });
 
   test("works: same job, different users", async function () {
-    let jobApp1 = await User.apply("u1", 1);
-    let jobApp2 = await User.apply("u2", 1);
+    let jobApp1 = await User.apply("u1", 3);
+    let jobApp2 = await User.apply("u2", 3);
     expect(jobApp1).toEqual({
       username: "u1",
-      jobId: 1
+      jobId: 3
     });
     expect(jobApp2).toEqual({
       username: "u2",
-      jobId: 1
+      jobId: 3
     });
   });
 
   test("works: same user, different jobs", async function () {
-    let jobApp1 = await User.apply("u1", 1);
-    let jobApp2 = await User.apply("u1", 2);
+    let jobApp1 = await User.apply("u2", 1);
+    let jobApp2 = await User.apply("u2", 3);
     expect(jobApp1).toEqual({
-      username: "u1",
+      username: "u2",
       jobId: 1
     });
     expect(jobApp2).toEqual({
-      username: "u1",
-      jobId: 2
+      username: "u2",
+      jobId: 3
     });
   });
 

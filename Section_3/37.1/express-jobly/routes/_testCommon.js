@@ -84,6 +84,10 @@ async function commonBeforeAll() {
         salary: 300,
         companyHandle: "c3"
       });
+
+  await User.apply("u1", 1);
+  await User.apply("u2", 2);
+  await User.apply("u2", 3);
 }
 
 async function commonBeforeEach() {

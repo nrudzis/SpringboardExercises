@@ -125,19 +125,31 @@ class User {
 
   static async get(username) {
     const userRes = await db.query(
-          `SELECT username,
-                  first_name AS "firstName",
-                  last_name AS "lastName",
-                  email,
-                  is_admin AS "isAdmin"
-           FROM users
-           WHERE username = $1`,
+          `SELECT u.username,
+                  u.first_name AS "firstName",
+                  u.last_name AS "lastName",
+                  u.email,
+                  u.is_admin AS "isAdmin",
+                  a.job_id AS "jobId"
+           FROM users u
+           LEFT JOIN applications a
+           ON u.username = a.username
+           WHERE u.username = $1`,
         [username],
     );
 
-    const user = userRes.rows[0];
+    if (!userRes.rows[0]) throw new NotFoundError(`No user: ${username}`);
 
-    if (!user) throw new NotFoundError(`No user: ${username}`);
+    const user = {
+      username: userRes.rows[0].username,
+      firstName: userRes.rows[0].firstName,
+      lastName: userRes.rows[0].lastName,
+      email: userRes.rows[0].email,
+      isAdmin: userRes.rows[0].isAdmin,
+      jobs: userRes.rows
+        .filter(row => row.jobId)
+        .map(row => row.jobId)
+    }
 
     return user;
   }

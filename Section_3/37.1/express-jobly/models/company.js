@@ -108,7 +108,7 @@ class Company {
            WHERE c.handle = $1`,
         [handle]);
 
-    if (companyRes.rows.length === 0) throw new NotFoundError(`No company: ${handle}`);
+    if (!companyRes.rows[0]) throw new NotFoundError(`No company: ${handle}`);
 
     const company = {
       handle: companyRes.rows[0].handle,
@@ -116,19 +116,15 @@ class Company {
       description: companyRes.rows[0].description,
       numEmployees: companyRes.rows[0].numEmployees,
       logoUrl: companyRes.rows[0].logoUrl,
-      jobs: []
-    }
-
-    companyRes.rows.forEach(row => {
-      if (row.id) {
-        company.jobs.push({
+      jobs: companyRes.rows
+        .filter(row => row.id)
+        .map(row => ({
           id: row.id,
           title: row.title,
           salary: row.salary,
           equity: row.equity
-        });
-      }
-    });
+        }))
+    }
 
     return company;
   }
