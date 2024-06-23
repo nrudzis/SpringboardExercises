@@ -3,6 +3,7 @@
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
 const { sqlForPartialUpdate, sqlForFilterCompanies } = require("../helpers/sql");
+const { groupAndNest } = require("../helpers/group");
 
 /** Related functions for companies. */
 
@@ -100,8 +101,7 @@ class Company {
                   j.id,
                   j.title,
                   j.salary,
-                  j.equity,
-                  j.company_handle AS "companyHandle"
+                  j.equity
            FROM companies c
            LEFT JOIN jobs j
            ON c.handle = j.company_handle
@@ -110,23 +110,14 @@ class Company {
 
     if (!companyRes.rows[0]) throw new NotFoundError(`No company: ${handle}`);
 
-    const company = {
-      handle: companyRes.rows[0].handle,
-      name: companyRes.rows[0].name,
-      description: companyRes.rows[0].description,
-      numEmployees: companyRes.rows[0].numEmployees,
-      logoUrl: companyRes.rows[0].logoUrl,
-      jobs: companyRes.rows
-        .filter(row => row.id)
-        .map(row => ({
-          id: row.id,
-          title: row.title,
-          salary: row.salary,
-          equity: row.equity
-        }))
-    }
+    const company = groupAndNest(
+      companyRes.rows,
+      "handle",
+      "jobs",
+      ["id", "title", "salary", "equity"]
+    );
 
-    return company;
+    return company[0];
   }
 
   /** Update company data with `data`.

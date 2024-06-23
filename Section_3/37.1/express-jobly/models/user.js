@@ -3,6 +3,7 @@
 const db = require("../db");
 const bcrypt = require("bcrypt");
 const { sqlForPartialUpdate } = require("../helpers/sql");
+const { groupAndNest } = require("../helpers/group");
 const {
   NotFoundError,
   BadRequestError,
@@ -14,6 +15,7 @@ const { BCRYPT_WORK_FACTOR } = require("../config.js");
 /** Related functions for users. */
 
 class User {
+
   /** authenticate user with username, password.
    *
    * Returns { username, first_name, last_name, email, is_admin }
@@ -98,27 +100,33 @@ class User {
 
   /** Find all users.
    *
-   * Returns [{ username, first_name, last_name, email, is_admin }, ...]
+   * Returns [{ username, first_name, last_name, email, isAdmin, jobs }, ... ]
+   *   where jobs is [ jobId, jobId, ... ]
    **/
 
   static async findAll() {
     const result = await db.query(
-          `SELECT username,
-                  first_name AS "firstName",
-                  last_name AS "lastName",
-                  email,
-                  is_admin AS "isAdmin"
-           FROM users
+          `SELECT u.username,
+                  u.first_name AS "firstName",
+                  u.last_name AS "lastName",
+                  u.email,
+                  u.is_admin AS "isAdmin",
+                  a.job_id AS "jobId"
+           FROM users u
+           LEFT JOIN applications a
+           ON u.username = a.username
            ORDER BY username`,
     );
 
-    return result.rows;
+    const all = groupAndNest(result.rows, "username", "jobs", ["jobId"]);
+
+    return all;
   }
 
   /** Given a username, return data about user.
    *
-   * Returns { username, first_name, last_name, is_admin, jobs }
-   *   where jobs is { id, title, company_handle, company_name, state }
+   * Returns { username, first_name, last_name, email, isAdmin, jobs }
+   *   where jobs is [ jobId, jobId, ... ]
    *
    * Throws NotFoundError if user not found.
    **/
@@ -140,18 +148,9 @@ class User {
 
     if (!userRes.rows[0]) throw new NotFoundError(`No user: ${username}`);
 
-    const user = {
-      username: userRes.rows[0].username,
-      firstName: userRes.rows[0].firstName,
-      lastName: userRes.rows[0].lastName,
-      email: userRes.rows[0].email,
-      isAdmin: userRes.rows[0].isAdmin,
-      jobs: userRes.rows
-        .filter(row => row.jobId)
-        .map(row => row.jobId)
-    }
+    const user = groupAndNest(userRes.rows, "handle", "jobs", ["jobId"]);
 
-    return user;
+    return user[0];
   }
 
   /** Update user data with `data`.
