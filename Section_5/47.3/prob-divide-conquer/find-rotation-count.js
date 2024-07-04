@@ -4,7 +4,7 @@ function findRotationCount(arr) {
 
   // binary search for index of first element of unrotated array
   while (left <= right) {
-    let mid = Math.floor((left + right) / 2);
+    const mid = Math.floor((left + right) / 2);
     if (arr[mid] < arr[mid - 1]) {
       return mid;
 
