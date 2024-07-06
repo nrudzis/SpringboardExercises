@@ -23,29 +23,29 @@ describe("push", function() {
   });
 });
 
-//describe("unshift", function() {
-//  it("adds node at start and increments length", function() {
-//    let lst = new LinkedList();
-//
-//    lst.unshift(5);
-//    expect(lst.length).toBe(1);
-//    expect(lst.head.val).toBe(5);
-//    expect(lst.tail.val).toBe(5);
-//
-//    lst.unshift(10);
-//    expect(lst.length).toBe(2);
-//    expect(lst.head.val).toBe(10);
-//    expect(lst.head.next.val).toBe(5);
-//    expect(lst.tail.val).toBe(5);
-//
-//    lst.unshift(15);
-//    expect(lst.length).toBe(3);
-//    expect(lst.head.val).toBe(15);
-//    expect(lst.head.next.next.val).toBe(5);
-//    expect(lst.tail.val).toBe(5);
-//  });
-//});
-//
+describe("unshift", function() {
+  it("adds node at start and increments length", function() {
+    let lst = new LinkedList();
+
+    lst.unshift(5);
+    expect(lst.length).toBe(1);
+    expect(lst.head.val).toBe(5);
+    expect(lst.tail.val).toBe(5);
+
+    lst.unshift(10);
+    expect(lst.length).toBe(2);
+    expect(lst.head.val).toBe(10);
+    expect(lst.head.next.val).toBe(5);
+    expect(lst.tail.val).toBe(5);
+
+    lst.unshift(15);
+    expect(lst.length).toBe(3);
+    expect(lst.head.val).toBe(15);
+    expect(lst.head.next.next.val).toBe(5);
+    expect(lst.tail.val).toBe(5);
+  });
+});
+
 //describe("pop", function() {
 //  it("removes node at end and decrements length", function() {
 //    let lst = new LinkedList([5, 10]);
