@@ -44,12 +44,26 @@ class LinkedList {
     this.length += 1;
   }
 
-//  /** pop(): return & remove last item. */
-//
-//  pop() {
-//
-//  }
-//
+  /** pop(): return & remove last item. */
+
+  pop() {
+    const poppedVal = this.tail.val;
+    if (this.head === this.tail) {
+      this.head = null;
+      this.tail = null;
+      this.length = 0;
+    } else {
+      let currentNode = this.head;
+      while (currentNode.next !== this.tail) {
+        currentNode = currentNode.next;
+      }
+      currentNode.next = null;
+      this.tail = currentNode;
+      this.length -= 1;
+    }
+    return poppedVal;
+  }
+
 //  /** shift(): return & remove first item. */
 //
 //  shift() {
