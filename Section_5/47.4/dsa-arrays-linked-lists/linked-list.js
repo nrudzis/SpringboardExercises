@@ -21,56 +21,63 @@ class LinkedList {
   /** push(val): add new value to end of list. */
 
   push(val) {
-
+    const newNode = new Node(val);
+    if (!this.head) {
+      this.head = newNode;
+      this.tail = newNode;
+    }
+    this.tail.next = newNode;
+    this.tail = newNode;
+    this.length += 1;
   }
 
-  /** unshift(val): add new value to start of list. */
-
-  unshift(val) {
-
-  }
-
-  /** pop(): return & remove last item. */
-
-  pop() {
-
-  }
-
-  /** shift(): return & remove first item. */
-
-  shift() {
-
-  }
-
-  /** getAt(idx): get val at idx. */
-
-  getAt(idx) {
-
-  }
-
-  /** setAt(idx, val): set val at idx to val */
-
-  setAt(idx, val) {
-
-  }
-
-  /** insertAt(idx, val): add node w/val before idx. */
-
-  insertAt(idx, val) {
-
-  }
-
-  /** removeAt(idx): return & remove item at idx, */
-
-  removeAt(idx) {
-
-  }
-
-  /** average(): return an average of all values in the list */
-
-  average() {
-    
-  }
+//  /** unshift(val): add new value to start of list. */
+//
+//  unshift(val) {
+//
+//  }
+//
+//  /** pop(): return & remove last item. */
+//
+//  pop() {
+//
+//  }
+//
+//  /** shift(): return & remove first item. */
+//
+//  shift() {
+//
+//  }
+//
+//  /** getAt(idx): get val at idx. */
+//
+//  getAt(idx) {
+//
+//  }
+//
+//  /** setAt(idx, val): set val at idx to val */
+//
+//  setAt(idx, val) {
+//
+//  }
+//
+//  /** insertAt(idx, val): add node w/val before idx. */
+//
+//  insertAt(idx, val) {
+//
+//  }
+//
+//  /** removeAt(idx): return & remove item at idx, */
+//
+//  removeAt(idx) {
+//
+//  }
+//
+//  /** average(): return an average of all values in the list */
+//
+//  average() {
+//    
+//  }
 }
 
 module.exports = LinkedList;
