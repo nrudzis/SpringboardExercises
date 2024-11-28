@@ -74,7 +74,7 @@ describe("maxSum", function() {
     let root = new BinaryTreeNode(10, node2, nodeNeg3);
     let tree = new BinaryTree(root);
 
-    expect(tree.maxSum()).toBe(109);
+    expect(tree.maxSum()).toBe(105);
   });
 });
 

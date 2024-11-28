@@ -51,7 +51,42 @@ class BinaryTree {
    * The path doesn't need to start at the root, but you can't visit a node more than once. */
 
   maxSum() {
-
+    if (this.root === null) return 0;
+    let queue = [this.root];
+    let paths = [];
+    let sums = [];
+    while (queue.length) {
+      let current = queue.shift();
+      if (current.left === null && current.right === null) { //leaf case
+        for (let i = 0; i < paths.length; i++) {
+          if (paths[i].leaves === 1) {
+            sums.push(paths[i].sum + current.val);
+          } else {
+            paths[i].sum += current.val;
+            paths[i].leaves++;
+          }
+        }
+      } else if (current.left && current.right) { //full node case
+        for (let i = 0; i < paths.length; i++) {
+          paths[i].sum += current.val;
+          paths[i].count++;
+        }
+        paths.push({ sum: current.val, leaves: 0, count: 1 });
+      } else { //everything else
+        for (let i = 0; i < paths.length; i++) {
+          paths[i].sum += current.val;
+        }
+        if (!paths.length && (current.left === null || current.right === null)) {
+          paths.push({ sum: current.val, leaves: 1, count: 1 });
+        } else {
+          paths.push({ sum: current.val, leaves: 0, count: 1 });
+        }
+      }
+      if (current.left) queue.push(current.left);
+      if (current.right) queue.push(current.right);
+    }
+    const max = Math.max(...sums);
+    return max;
   }
 
   /** nextLarger(lowerBound): return the smallest value in the tree
