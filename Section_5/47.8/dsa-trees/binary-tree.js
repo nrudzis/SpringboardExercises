@@ -52,41 +52,22 @@ class BinaryTree {
 
   maxSum() {
     if (this.root === null) return 0;
-    let queue = [this.root];
-    let paths = [];
-    let sums = [];
-    while (queue.length) {
-      let current = queue.shift();
-      if (current.left === null && current.right === null) { //leaf case
-        for (let i = 0; i < paths.length; i++) {
-          if (paths[i].leaves === 1) {
-            sums.push(paths[i].sum + current.val);
-          } else {
-            paths[i].sum += current.val;
-            paths[i].leaves++;
-          }
-        }
-      } else if (current.left && current.right) { //full node case
-        for (let i = 0; i < paths.length; i++) {
-          paths[i].sum += current.val;
-          paths[i].count++;
-        }
-        paths.push({ sum: current.val, leaves: 0, count: 1 });
-      } else { //everything else
-        for (let i = 0; i < paths.length; i++) {
-          paths[i].sum += current.val;
-        }
-        if (!paths.length && (current.left === null || current.right === null)) {
-          paths.push({ sum: current.val, leaves: 1, count: 1 });
-        } else {
-          paths.push({ sum: current.val, leaves: 0, count: 1 });
-        }
-      }
-      if (current.left) queue.push(current.left);
-      if (current.right) queue.push(current.right);
+    function pathSum(node) {
+      if (node === null) return { localMax: 0, globalMax: null };
+      const left = pathSum(node.left);
+      const right = pathSum(node.right);
+      const currentPathSum = node.val + Math.max(0, left.localMax) + Math.max(0, right.localMax);
+      const currentMaxSum = Math.max(
+        left.globalMax === null ? currentPathSum : left.globalMax,
+        right.globalMax === null ? currentPathSum : right.globalMax,
+        currentPathSum
+      );
+      return {
+        localMax: node.val + Math.max(0, left.localMax, right.localMax),
+        globalMax: currentMaxSum
+      };
     }
-    const max = Math.max(...sums);
-    return max;
+    return pathSum(this.root).globalMax;
   }
 
   /** nextLarger(lowerBound): return the smallest value in the tree
