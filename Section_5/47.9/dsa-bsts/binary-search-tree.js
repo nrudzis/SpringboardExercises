@@ -15,21 +15,24 @@ class BinarySearchTree {
    * Returns the tree. Uses iteration. */
 
   insert(val) {
-    if (this.root === null) this.root = new Node(val);
-    let stack = [this.root];
-    while (stack.length) {
-      let current = stack.pop();
-      if (current.val === val) return this;
-      if (current.val > val) {
+    if (this.root === null) {
+      this.root = new Node(val);
+      return this;
+    }
+    let current = this.root;
+    while (true) {
+      if (current.val === val) {
+        return this;
+      } else if (current.val > val) {
         if (current.left) {
-          stack.push(current.left)
+          current = current.left;
         } else {
           current.left = new Node(val);
           return this;
         }
       } else {
         if (current.right) {
-          stack.push(current.right)
+          current = current.right;
         } else {
           current.right = new Node(val);
           return this;
