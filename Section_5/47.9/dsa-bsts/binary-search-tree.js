@@ -42,7 +42,29 @@ class BinarySearchTree {
    * Returns the tree. Uses recursion. */
 
   insertRecursively(val) {
-
+    if (this.root === null) {
+      this.root = new Node(val);
+      return this;
+    } else {
+      const recursor = (val, node) => {
+        if (node.val === val) return;
+        if (node.val > val) {
+          if (node.left) {
+            recursor(val, node.left);
+          } else {
+            node.left = new Node(val);
+          }
+        } else {
+          if (node.right) {
+            recursor(val, node.right);
+          } else {
+            node.right = new Node(val);
+          }
+        }
+      };
+      recursor(val, this.root);
+    }
+    return this;
   }
 
   /** find(val): search the tree for a node with value val.
