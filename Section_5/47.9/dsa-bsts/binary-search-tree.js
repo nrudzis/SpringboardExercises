@@ -95,7 +95,6 @@ class BinarySearchTree {
         }
       }
     }
-    return match;
   }
 
   /** findRecursively(val): search the tree for a node with value val.
