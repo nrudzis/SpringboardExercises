@@ -64,7 +64,7 @@ class LinkedList {
     return poppedVal;
   }
 
-    /** shift(): return & remove first item. */
+  /** shift(): return & remove first item. */
 
   shift() {
     const shiftedVal = this.head.val;
@@ -91,7 +91,7 @@ class LinkedList {
       let current = this.head;
       let count = 0;
       while (count !== idx) {
-        current = this.next;
+        current = current.next;
         count = count++;
       }
       return current.val;
@@ -109,30 +109,88 @@ class LinkedList {
       let current = this.head;
       let count = 0;
       while (count !== idx) {
-        current = this.next;
+        current = current.next;
         count = count++;
       }
       current.val = val;
     }
   }
 
-//  /** insertAt(idx, val): add node w/val before idx. */
-//
-//  insertAt(idx, val) {
-//
-//  }
-//
-//  /** removeAt(idx): return & remove item at idx, */
-//
-//  removeAt(idx) {
-//
-//  }
-//
-//  /** average(): return an average of all values in the list */
-//
-//  average() {
-//    
-//  }
+  /** insertAt(idx, val): add node w/val before idx. */
+
+  insertAt(idx, val) {
+    if (idx > this.length) return false;
+    let newNode = new Node(val);
+    if (this.length === 0) {
+      this.head = newNode;
+      this.tail = newNode;
+    } else if (idx === 0) {
+      newNode.next = this.head;
+      this.head = newNode;
+    } else {
+      let current = this.head.next;
+      let count = 1;
+      while (count !== idx-1) {
+        current = current.next;
+        count++;
+      }
+      if (idx === this.length) {
+        this.tail = newNode;
+      } else {
+        newNode.next = current.next;
+      }
+      current.next = newNode;
+    }
+    this.length++;
+  }
+
+  /** removeAt(idx): return & remove item at idx, */
+
+  removeAt(idx) {
+    let removedVal;
+    if (idx > this.length-1) {
+      return false;
+    } else if (this.length === 1) {
+      removedVal = this.head.val;
+      this.head = null;
+      this.tail = null;
+    } else if (this.length === 2) {
+      if (idx === 0) {
+        removedVal = this.head.val;
+        this.head = this.tail;
+      } else {
+        removedVal = this.tail.val;
+        this.tail = this.head;
+      }
+    } else {
+      let current = this.head;
+      let count = 0;
+      while (count !== idx-1) {
+        current = current.next;
+        count++;
+      }
+      current.next = current.next.next;
+      removedVal = current.next.val;
+    }
+    this.length--;
+  }
+
+  /** average(): return an average of all values in the list */
+
+  average() {
+    if (this.length === 0) {
+      return 0;
+    } else {
+      let sum = 0;
+      let current = this.head;
+      while (current !== null) {
+        sum = sum + current.val;
+        current = current.next;
+      }
+      const avg = sum / this.length;
+      return avg;
+    }
+  }
 }
 
 module.exports = LinkedList;
