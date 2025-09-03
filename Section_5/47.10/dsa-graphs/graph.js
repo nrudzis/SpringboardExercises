@@ -40,11 +40,43 @@ class Graph {
     this.nodes.forEach(node => node.adjacent.delete(vertex));
   }
 
-//  // this function returns an array of Node values using DFS
-//  depthFirstSearch(start) {}
-//
-//  // this function returns an array of Node values using BFS
-//  breadthFirstSearch(start) {}
+  // this function returns an array of Node values using DFS
+  depthFirstSearch(start) {
+    let toVisitStack = [start];
+    let seen = new Set(toVisitStack);
+    let vals = [];
+
+    while (toVisitStack.length > 0) {
+      let currNode = toVisitStack.pop();
+      for (let node of currNode.adjacent) {
+        if (!seen.has(node)) {
+          toVisitStack.push(node);
+          seen.add(node);
+        }
+      }
+      vals.push(currNode.value);
+    }
+    return vals;
+  }
+
+  // this function returns an array of Node values using BFS
+  breadthFirstSearch(start) {
+    let toVisitQueue = [start];
+    let seen = new Set(toVisitQueue);
+    let vals = [];
+
+    while (toVisitQueue.length > 0) {
+      let currNode = toVisitQueue.shift();
+      for (let node of currNode.adjacent) {
+        if (!seen.has(node)) {
+          toVisitQueue.push(node);
+          seen.add(node);
+        }
+      }
+      vals.push(currNode.value);
+    }
+    return vals;
+  }
 }
 
 module.exports = {Graph, Node}
