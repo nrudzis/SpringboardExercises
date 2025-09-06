@@ -24,7 +24,12 @@ function merge(arr1, arr2) {
   return mergedArr;
 }
 
-//function mergeSort() {}
+function mergeSort(arr) {
+  if (arr.length <= 1) return arr;
+  const mid = Math.floor(arr.length / 2);
+  const arr1 = mergeSort(arr.slice(0, mid));
+  const arr2 = mergeSort(arr.slice(mid));
+  return merge(arr1, arr2);
+}
 
-module.exports = { merge };
-//module.exports = { merge, mergeSort };
+module.exports = { merge, mergeSort };
