@@ -12,24 +12,6 @@ async function getAndShowStoriesOnStart() {
   putStoriesOnPage();
 }
 
-async function submitNewStory(evt) {
-  console.debug("submitNewStory", evt);
-  evt.preventDefault();
-
-  const author = $("#new-story-author").val();
-  const title = $("#new-story-title").val();
-  const url = $("#new-story-url").val();
-
-  const newStory = await storyList.addStory(currentUser, {author: author, title: title, url: url});
-  storyList = await StoryList.getStories();
-  putStoriesOnPage();
-
-  $newStoryForm.hide();
-  $newStoryForm.trigger("reset");
-}
-
-$newStoryForm.on("submit", submitNewStory);
-
 /**
  * A render method to render HTML for an individual Story instance
  * - story: an instance of Story
@@ -69,3 +51,25 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+/** Handle new story form submission. */
+
+async function submitNewStory(evt) {
+  console.debug("submitNewStory", evt);
+  evt.preventDefault();
+
+  // grab the author, title, and url
+  const author = $("#new-story-author").val();
+  const title = $("#new-story-title").val();
+  const url = $("#new-story-url").val();
+
+  // send story data to API and add story to storyList
+  await storyList.addStory(currentUser, { author, title, url });
+
+  $newStoryForm.trigger("reset");
+
+  hidePageComponents();
+  putStoriesOnPage();
+}
+
+$newStoryForm.on("submit", submitNewStory);
