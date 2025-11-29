@@ -97,48 +97,6 @@ function saveUserCredentialsInLocalStorage() {
 }
 
 /******************************************************************************
- * User favorite stories
- */
-
-function isFavoriteStory(storyId) {
-  return currentUser.favorites.map(f => f.storyId).indexOf(storyId) > -1;
-}
-
-function starFavoriteStories(isFavorite, storyId) {
-  if(isFavorite) {
-    $(`#${storyId}`).children(":first-child").removeClass("far").addClass("fas");
-  } else {
-    $(`#${storyId}`).children(":first-child").removeClass("fas").addClass("far");
-  }
-}
-
-async function updateFavoriteStories(storyId) {
-  let isFavorite = !isFavoriteStory(storyId);
-
-  starFavoriteStories(isFavorite, storyId);
-
-  if(isFavorite) {
-    const newFavorite = await currentUser.addOrRemoveFavoriteStory(storyId, "POST");
-  } else {
-    const deletedFavorite = await currentUser.addOrRemoveFavoriteStory(storyId, "DELETE");
-  }
-}
-
-async function handleFavoriteStoryClick(evt) {
-  const storyId = evt.target.parentNode.id;
-
-  //console.log(`you clicked ${storyId}`);
-
-  if(!currentUser) {
-    navLoginClick();
-  }
-
-  updateFavoriteStories(storyId);
-}
-
-$allStoriesList.on("click", "i.fa-star", handleFavoriteStoryClick);
-
-/******************************************************************************
  * General UI stuff about users
  */
 
@@ -154,10 +112,7 @@ function updateUIOnUserLogin() {
 
   $allStoriesList.show();
 
-  for(let storyId of $allStoriesList.children("li").map(function() { return this.id })) {
-    let isFavorite = isFavoriteStory(storyId);
-    starFavoriteStories(isFavorite, storyId);
-  }
-
   updateNavOnLogin();
+  hidePageComponents();
+  putStoriesOnPage();
 }
