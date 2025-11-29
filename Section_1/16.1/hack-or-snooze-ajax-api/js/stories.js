@@ -23,9 +23,16 @@ function generateStoryMarkup(story) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
+
+  // If user is logged in, make favorite button a solid star for stories in the
+  // user's favorites. Make favorite button a regular (outline) star for stories
+  // not in the user's favorites.
+  const favStatus = currentUser && currentUser.favorites.map(f => f.storyId).includes(story.storyId) ? "fas" : "far";
+  const favBtn = `<i class="${favStatus} fa-star fav-btn" data-story-id="${story.storyId}"></i>`;
+
   return $(`
       <li id="${story.storyId}">
-        <i class="far fa-star"></i>
+        ${currentUser ? favBtn : ""}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -73,3 +80,29 @@ async function submitNewStory(evt) {
 }
 
 $newStoryForm.on("submit", submitNewStory);
+
+/** Handle favorite button clicks. */
+
+async function updateFavoriteStories() {
+  console.debug(addOrRemoveFavoriteStory);
+
+  // grab storyId for the clicked story
+  const clickedStoryId = $(this).data("story-id");
+
+  let updatedUserData;
+
+  // if clicked story is already in the current user's favorites, remove it
+  // otherwise, add it
+  if (currentUser.favorites.map(f => f.storyId).includes(clickedStoryId)) {
+    updatedUserData = await currentUser.addOrRemoveFavoriteStory(clickedStoryId, "DELETE");
+  } else {
+    updatedUserData = await currentUser.addOrRemoveFavoriteStory(clickedStoryId, "POST");
+  }
+
+  // update current user data
+  Object.assign(currentUser, updatedUserData);
+
+  putStoriesOnPage();
+}
+
+$(document).on("click", ".fav-btn", updateFavoriteStories);
