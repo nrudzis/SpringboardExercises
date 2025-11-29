@@ -219,23 +219,22 @@ class User {
     }
   }
 
+  /** Send storyId to the API & return user data with updated favorites.
+   * - storyId: the storyId of story to add/remove
+   * - method: "POST" to add a favorite and "DELETE" to remove
+   */
+
   async addOrRemoveFavoriteStory(storyId, method) {
-    const token = this.loginToken;
     const response = await axios({
       url: `${BASE_URL}/users/${this.username}/favorites/${storyId}`,
       method: method,
-      params: { token }
+      data: {
+        token: this.loginToken,
+      }
     });
 
-    currentUser = new User(
-      {
-        username: this.username,
-        name: this.name,
-        createdAt: this.createdAt,
-        favorites: response.data.user.favorites,
-        ownStories: this.stories
-      },
-      token
-    );
+    const { user } = response.data;
+
+    return user;
   }
 }
