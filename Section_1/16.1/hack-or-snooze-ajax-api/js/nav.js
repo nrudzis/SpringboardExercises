@@ -55,3 +55,13 @@ function navSubmitClick(evt) {
 }
 
 $navNewStory.on("click", navSubmitClick);
+
+/** Show favorite stories on click on "favorites" */
+
+function navFavoritesClick() {
+  console.debug("navFavoritesClick");
+  hidePageComponents();
+  putFavoriteStoriesOnPage();
+}
+
+$navFavorites.on("click", navFavoritesClick);

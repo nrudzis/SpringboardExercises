@@ -107,3 +107,20 @@ async function updateFavoriteStories() {
 }
 
 $(document).on("click", ".fav-btn", updateFavoriteStories);
+
+/** Generate favorite stories HTML and put them on the page. */
+
+function putFavoriteStoriesOnPage() {
+  console.debug("putFavoriteStoriesOnPage");
+
+  $allStoriesList.empty();
+
+  // loop through all favorite stories and generate HTML for them
+  for (let favorite of currentUser.favorites) {
+    const storyInstance = new Story(favorite);
+    const $story = generateStoryMarkup(storyInstance);
+    $allStoriesList.append($story);
+  }
+
+  $allStoriesList.show();
+}
