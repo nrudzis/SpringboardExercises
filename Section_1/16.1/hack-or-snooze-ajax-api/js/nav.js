@@ -25,6 +25,16 @@ function navLoginClick(evt) {
 
 $navLogin.on("click", navLoginClick);
 
+/** Show favorites in nav when the user has favorites, otherwise hide. */
+
+function updateNavFavorites() {
+  if (!currentUser.favorites.length) {
+    $navFavorites.hide();
+  } else {
+    $navFavorites.show();
+  }
+}
+
 /** When a user first logins in, update the navbar to reflect that. */
 
 function updateNavOnLogin() {
@@ -33,6 +43,7 @@ function updateNavOnLogin() {
   $navLogin.hide();
   $navLogOut.show();
   $navNewStory.show();
+  updateNavFavorites();
   $navUserProfile.text(`${currentUser.username}`).show();
 }
 

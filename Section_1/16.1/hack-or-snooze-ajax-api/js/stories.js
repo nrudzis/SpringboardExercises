@@ -102,6 +102,7 @@ async function updateFavoriteStories() {
   // update current user data
   Object.assign(currentUser, updatedUserData);
 
+  updateNavFavorites();
   putStoriesOnPage();
 }
 
