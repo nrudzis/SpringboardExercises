@@ -30,11 +30,26 @@
   text-decoration: none;
 }
 
-.story-author,
-.story-user {
+.story-author {
   margin-left: 2em;
 }
 
 .story-user {
   display: block;
+}
+
+
+/* Story forms */
+
+.story-form button {
+  width: 4rem;
+  margin-left: 80px;
+}
+
+#new-story-form button {
+  width: 8rem;
+}
+
+.story-form-container {
+  padding-left: 20px;
 }
