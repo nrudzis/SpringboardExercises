@@ -102,6 +102,30 @@ class StoryList {
 
     return storyInstance;
   }
+
+  /** Removes story data from API, removes Story instance from the story list.
+   * - user - the current instance of User who will delete the story
+   * - storyId: the storyId of story to remove
+   *
+   * Returns success message.
+   */
+
+  async removeStory(user, storyId) {
+    const response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "DELETE",
+      data: {
+        token: user.loginToken,
+      }
+    });
+
+    let { message } = response.data;
+
+    this.stories = this.stories.filter(s => s.storyId !== storyId);
+
+    return message;
+  }
+
 }
 
 
