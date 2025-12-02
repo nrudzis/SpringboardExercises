@@ -30,6 +30,8 @@ function generateStoryMarkup(story) {
   const favStatus = currentUser && currentUser.favorites.map(f => f.storyId).includes(story.storyId) ? "fas" : "far";
   const favBtn = `<i class="${favStatus} fa-star fav-btn" data-story-id="${story.storyId}"></i>`;
 
+  const removeBtn = `<i class="fas fa-trash-alt remove-btn" data-story-id="${story.storyId}"></i>`;
+
   return $(`
       <li id="${story.storyId}">
         ${currentUser ? favBtn : ""}
@@ -39,6 +41,7 @@ function generateStoryMarkup(story) {
         <small class="story-hostname">(${hostName})</small>
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
+        ${currentUser && currentUser.username === story.username ? removeBtn : ""}
       </li>
     `);
 }
@@ -124,3 +127,22 @@ function putFavoriteStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+/** Handle remove story button click */
+
+async function removeStory() {
+  console.debug("removeStory");
+
+  // grab storyId for the clicked story
+  const clickedStoryId = $(this).data("story-id");
+
+  // send storyId to API and remove story from storyList
+  await storyList.removeStory(currentUser, clickedStoryId);
+  currentUser.favorites = currentUser.favorites.filter(f => f.storyId !== clickedStoryId);
+
+  hidePageComponents();
+  updateNavFavorites();
+  putStoriesOnPage();
+}
+
+$(document).on("click", ".remove-btn", removeStory);
