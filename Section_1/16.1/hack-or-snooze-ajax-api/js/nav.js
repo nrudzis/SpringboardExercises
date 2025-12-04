@@ -35,6 +35,16 @@ function updateNavFavorites() {
   }
 }
 
+/** Show "my stories" in nav when the user has stories, otherwise hide. */
+
+function updateNavUserStories() {
+  if (!currentUser.ownStories.length) {
+    $navUserStories.hide();
+  } else {
+    $navUserStories.show();
+  }
+}
+
 /** When a user first logins in, update the navbar to reflect that. */
 
 function updateNavOnLogin() {
@@ -48,6 +58,7 @@ function updateNavOnLogin() {
 }
 
 /** Show new story form on click on "submit" */
+
 function navSubmitClick(evt) {
   console.debug("navSubmitClick", evt);
   hidePageComponents();
@@ -65,3 +76,13 @@ function navFavoritesClick() {
 }
 
 $navFavorites.on("click", navFavoritesClick);
+
+/** Show current user's stories on click on "my stories" */
+
+function navUserStoriesClick() {
+  console.debug("navUserStoriesClick");
+  hidePageComponents();
+  putUserStoriesOnPage();
+}
+
+$navUserStories.on("click", navUserStoriesClick);

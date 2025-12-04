@@ -1,4 +1,4 @@
-"use strict";
+use strict";
 
 // This is the global list of the stories, an instance of StoryList
 let storyList;
@@ -74,11 +74,15 @@ async function submitNewStory(evt) {
   const url = $("#new-story-url").val();
 
   // send story data to API and add story to storyList
-  await storyList.addStory(currentUser, { author, title, url });
+  const storyInstance = await storyList.addStory(currentUser, {author, title, url});
+
+  // add Story instance to current user's stories
+  currentUser.ownStories.push(storyInstance);
 
   $newStoryForm.trigger("reset");
 
   hidePageComponents();
+  updateNavUserStories();
   putStoriesOnPage();
 }
 
@@ -136,13 +140,33 @@ async function removeStory() {
   // grab storyId for the clicked story
   const clickedStoryId = $(this).data("story-id");
 
-  // send storyId to API and remove story from storyList
+  // send storyId to API, remove story from storyList and current user's stories
   await storyList.removeStory(currentUser, clickedStoryId);
+  currentUser.ownStories = currentUser.ownStories.filter(s => s.storyId != clickedStoryId);
+  // also remove story from current user's favorites, if it's a favorite story
   currentUser.favorites = currentUser.favorites.filter(f => f.storyId !== clickedStoryId);
 
   hidePageComponents();
   updateNavFavorites();
+  updateNavUserStories();
   putStoriesOnPage();
 }
 
 $(document).on("click", ".remove-btn", removeStory);
+
+/** Generate current user's stories HTML and put them on the page */
+
+function putUserStoriesOnPage() {
+  console.debug("putUserStoriesOnPage");
+
+  $allStoriesList.empty();
+
+  // loop through all current user's stories and generate HTML for them
+  for (let story of currentUser.ownStories.reverse()) {
+    const storyInstance = new Story(story);
+    const $story = generateStoryMarkup(storyInstance);
+    $allStoriesList.append($story);
+  }
+
+  $allStoriesList.show();
+}
