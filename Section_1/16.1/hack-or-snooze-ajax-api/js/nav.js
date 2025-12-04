@@ -49,7 +49,6 @@ function updateNavUserStories() {
 
 function updateNavOnLogin() {
   console.debug("updateNavOnLogin");
-  $(".main-nav-links").show();
   $navLogin.hide();
   $navLogOut.show();
   $navNewStory.show();
