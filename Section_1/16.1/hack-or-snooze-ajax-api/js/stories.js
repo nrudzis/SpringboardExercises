@@ -35,12 +35,14 @@ function generateStoryMarkup(story) {
   return $(`
       <li id="${story.storyId}">
         ${currentUser ? favBtn : ""}
-        <a href="${story.url}" target="a_blank" class="story-link">
-          ${story.title}
-        </a>
-        <small class="story-hostname">(${hostName})</small>
-        <small class="story-author">by ${story.author}</small>
-        <small class="story-user">posted by ${story.username}</small>
+        <div class="story-container">
+          <a href="${story.url}" target="a_blank" class="story-link">
+            ${story.title}
+          </a>
+          <small class="story-hostname">(${hostName})</small>
+          <small class="story-author">by ${story.author}</small>
+          <small class="story-user">posted by ${story.username}</small>
+        </div>
         ${currentUser && currentUser.username === story.username ? removeBtn : ""}
       </li>
     `);

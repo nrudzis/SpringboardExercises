@@ -19,6 +19,23 @@
 
 /* Individual stories */
 
+li {
+  line-height: 1.5;
+}
+
+.fav-btn,
+.remove-btn {
+  display: inline-block;
+  vertical-align: baseline;
+  margin: 0 3px;
+  cursor: pointer;
+}
+
+.story-container {
+  display: inline-block;
+  vertical-align: top;
+}
+
 .story-link {
   color: black;
   font-size: 0.85rem;
@@ -30,12 +47,18 @@
   text-decoration: none;
 }
 
+.story-author,
+.story-user {
+  display: block;
+  font-size: 0.85rem;
+}
+
 .story-author {
-  margin-left: 2em;
+  color: #556b2f;
 }
 
 .story-user {
-  display: block;
+  color: #d39e17;
 }
 
 
