@@ -1,4 +1,4 @@
-use strict";
+"use strict";
 
 // This is the global list of the stories, an instance of StoryList
 let storyList;
@@ -93,7 +93,7 @@ $newStoryForm.on("submit", submitNewStory);
 /** Handle favorite button clicks. */
 
 async function updateFavoriteStories() {
-  console.debug(addOrRemoveFavoriteStory);
+  console.debug(updateFavoriteStories);
 
   // grab storyId for the clicked story
   const clickedStoryId = $(this).data("story-id");
@@ -125,7 +125,7 @@ function putFavoriteStoriesOnPage() {
   $allStoriesList.empty();
 
   // loop through all favorite stories and generate HTML for them
-  for (let favorite of currentUser.favorites) {
+  for (let favorite of currentUser.favorites.reverse()) {
     const storyInstance = new Story(favorite);
     const $story = generateStoryMarkup(storyInstance);
     $allStoriesList.append($story);

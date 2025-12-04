@@ -25,7 +25,7 @@ function navLoginClick(evt) {
 
 $navLogin.on("click", navLoginClick);
 
-/** Show favorites in nav when the user has favorites, otherwise hide. */
+/** Show "favorites" in nav when the user has favorites, otherwise hide. */
 
 function updateNavFavorites() {
   if (!currentUser.favorites.length) {
@@ -53,6 +53,7 @@ function updateNavOnLogin() {
   $navLogOut.show();
   $navNewStory.show();
   updateNavFavorites();
+  updateNavUserStories();
   $navUserProfile.text(`${currentUser.username}`).show();
 }
 

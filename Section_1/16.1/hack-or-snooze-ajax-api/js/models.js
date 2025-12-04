@@ -87,7 +87,7 @@ class StoryList {
       }
     });
 
-    let { story } = response.data
+    let { story } = response.data;
 
     const storyInstance = new Story({
       storyId: story.storyId,
@@ -125,7 +125,6 @@ class StoryList {
 
     return message;
   }
-
 }
 
 
@@ -245,7 +244,7 @@ class User {
 
   /** Send storyId to the API & return user data with updated favorites.
    * - storyId: the storyId of story to add/remove
-   * - method: "POST" to add a favorite and "DELETE" to remove
+   * - method: "POST" to add a favorite, "DELETE" to remove
    */
 
   async addOrRemoveFavoriteStory(storyId, method) {
