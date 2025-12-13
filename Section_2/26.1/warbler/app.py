@@ -324,11 +324,9 @@ def homepage():
     """
 
     if g.user:
-        messages = (Message
-                    .query
-                    .order_by(Message.timestamp.desc())
-                    .limit(100)
-                    .all())
+
+        #last 100 messages from user and user's followed users
+        messages = g.user.feed_messages().limit(100).all()
 
         return render_template('home.html', messages=messages)
 

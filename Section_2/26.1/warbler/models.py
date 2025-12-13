@@ -130,6 +130,24 @@ class User(db.Model):
         found_user_list = [user for user in self.following if user == other_user]
         return len(found_user_list) == 1
 
+    def feed_messages(self):
+        """Messages from user and user's followed users."""
+
+        followed_ids = (
+            db.session.query(Follows.user_being_followed_id)
+            .filter(Follows.user_following_id == self.id)
+        )
+
+        return (
+            Message
+            .query
+            .filter(
+                (Message.user_id == self.id) |
+                (Message.user_id.in_(followed_ids))
+            )
+            .order_by(Message.timestamp.desc())
+        )
+
     @classmethod
     def signup(cls, username, email, password, image_url):
         """Sign up user.
