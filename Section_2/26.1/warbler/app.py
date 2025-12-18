@@ -262,6 +262,27 @@ def delete_user():
     return redirect("/signup")
 
 
+@app.route('/users/add_like/<int:message_id>', methods=["POST"])
+def likes_add_or_remove(message_id):
+    """Add or remove a like:
+
+    If already in user's likes, remove, otherwise add.
+    """
+
+    message = Message.query.get_or_404(message_id)
+
+    if message in g.user.likes:
+        g.user.likes.remove(message)
+        flash("Message removed from likes.", "success")
+    else:
+        g.user.likes.append(message)
+        flash("Message added to likes.", "success")
+
+    db.session.commit()
+
+    return redirect("/")
+
+
 ##############################################################################
 # Messages routes:
 
